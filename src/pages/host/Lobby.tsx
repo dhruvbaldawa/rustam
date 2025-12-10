@@ -4,10 +4,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
-import { useRoom } from '../../hooks/useRoom';
+import { ArrowLeft, Play, Shuffle } from 'lucide-react';
+import { useRoom } from '@/hooks/useRoom';
 import { Unsubscribe, ref, get } from 'firebase/database';
-import { db } from '../../lib/firebase';
-import { THEMES, RANDOM_THEME } from '../../lib/themes';
+import { db } from '@/lib/firebase';
+import { THEMES, RANDOM_THEME } from '@/lib/themes';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageLayout } from '@/components/game/page-layout';
+import { RoomCode } from '@/components/game/room-code';
+import { PlayerList } from '@/components/game/player-list';
 
 export const Lobby = () => {
   const navigate = useNavigate();
@@ -67,84 +73,88 @@ export const Lobby = () => {
 
   if (loading || !room) {
     return (
-      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800">
-        <p className="text-white text-xl">Creating room...</p>
-      </div>
+      <PageLayout>
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-white text-xl">Creating room...</p>
+        </div>
+      </PageLayout>
     );
   }
 
   const joinUrl = `${window.location.origin}/play?code=${room.code}`;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
-      <div className="w-full max-w-md text-center">
-        {/* Room Code */}
-        <h1 className="text-5xl md:text-6xl font-bold text-white mb-2" style={{ fontSize: 'clamp(40px, 8vw, 64px)' }}>
-          {room.code}
-        </h1>
-        <p className="text-slate-400 mb-8">Room Code</p>
+    <PageLayout>
+      <div className="w-full max-w-md space-y-6">
+        {/* QR Code Card */}
+        <Card glass glow className="fade-in-up">
+          <CardContent className="p-4">
+            <div className="flex justify-center bg-white p-4 rounded-lg">
+              <QRCode
+                value={joinUrl}
+                size={180}
+                level="H"
+              />
+            </div>
+            <div className="text-center mt-4 space-y-1">
+              <p className="room-code text-3xl font-bold text-foreground">{room.code}</p>
+              <p className="text-muted-foreground text-sm">Scan QR or enter code to join</p>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* QR Code */}
-        <div className="flex justify-center mb-6 bg-white p-4 rounded-lg">
-          <QRCode
-            value={joinUrl}
-            size={Math.min(256, window.innerWidth * 0.6)}
-            level="H"
-            includeMargin={true}
-          />
-        </div>
-
-        <p className="text-slate-300 text-sm mb-2">Scan to join</p>
-        <p className="text-slate-400 text-xs mb-8">Or enter code: {room.code}</p>
-
-        {/* Player Count */}
-        <div className="mb-8 p-4 bg-slate-700 rounded-lg">
-          <p className="text-white text-lg">
-            {players.length} {players.length === 1 ? 'player' : 'players'}
-          </p>
-        </div>
-
-        {/* Player List */}
-        {players.length > 0 && (
-          <div className="mb-8 p-4 bg-slate-700 rounded-lg text-left">
-            <h3 className="text-white font-semibold mb-3">Players:</h3>
-            <ul className="text-slate-300 text-sm space-y-1">
-              {players.map((player) => (
-                <li key={player.uid}>{player.name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* Player List Card */}
+        <Card glass className="fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center justify-between">
+              <span>Players</span>
+              <span className="text-muted-foreground text-sm font-normal">
+                {players.length} joined
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PlayerList players={players} />
+          </CardContent>
+        </Card>
 
         {/* Error Display */}
         {error && (
-          <div className="mb-4 p-4 bg-red-900 border border-red-700 rounded-lg">
-            <p className="text-white text-sm font-medium">{error}</p>
-          </div>
+          <Card className="bg-destructive/20 border-destructive fade-in-up">
+            <CardContent className="p-4">
+              <p className="text-destructive-foreground text-sm font-medium">{error}</p>
+            </CardContent>
+          </Card>
         )}
 
         {/* Theme Selection */}
-        <div className="mb-4">
-          <label htmlFor="theme-selector" className="block text-white font-semibold mb-2">
-            Choose Theme:
-          </label>
-          <select
-            id="theme-selector"
-            value={selectedTheme}
-            onChange={(e) => setSelectedTheme(e.target.value)}
-            className="w-full py-3 px-4 rounded-lg bg-slate-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer btn-hover"
-          >
-            <option value={RANDOM_THEME}>{RANDOM_THEME} (Recommended)</option>
-            {THEMES.map((theme) => (
-              <option key={theme} value={theme}>
-                {theme}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Card glass className="fade-in-up" style={{ animationDelay: '150ms' }}>
+          <CardContent className="p-4">
+            <label htmlFor="theme-selector" className="block text-foreground font-semibold mb-2 text-sm">
+              Choose Theme
+            </label>
+            <div className="relative">
+              <Shuffle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <select
+                id="theme-selector"
+                value={selectedTheme}
+                onChange={(e) => setSelectedTheme(e.target.value)}
+                className="w-full py-3 pl-10 pr-4 rounded-lg bg-input border border-border text-foreground font-medium focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer appearance-none"
+              >
+                <option value={RANDOM_THEME}>{RANDOM_THEME} (Recommended)</option>
+                {THEMES.map((theme) => (
+                  <option key={theme} value={theme}>
+                    {theme}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Start Game Button */}
-        <button
+        <Button
           onClick={async () => {
             if (players.length >= 2) {
               const success = await startRound(room.code, selectedTheme);
@@ -154,22 +164,25 @@ export const Lobby = () => {
             }
           }}
           disabled={players.length < 2}
-          className={`w-full py-3 px-4 rounded-lg font-bold text-white transition cursor-pointer btn-hover ${
-            players.length >= 2
-              ? 'bg-green-500 hover:bg-green-600'
-              : 'bg-slate-600 cursor-not-allowed'
-          }`}
+          variant={players.length >= 2 ? 'game' : 'secondary'}
+          size="xl"
+          className="w-full gap-3 fade-in-up"
+          style={{ animationDelay: '200ms' }}
         >
+          <Play className="w-6 h-6" />
           {players.length >= 2 ? 'Start Game' : 'Need 2+ Players'}
-        </button>
+        </Button>
 
-        <button
+        {/* Back Button */}
+        <Button
           onClick={() => navigate('/')}
-          className="w-full mt-4 py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
+          variant="ghost"
+          className="w-full text-muted-foreground"
         >
+          <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Home
-        </button>
+        </Button>
       </div>
-    </div>
+    </PageLayout>
   );
 };

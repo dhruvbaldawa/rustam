@@ -1,9 +1,134 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Import animations */
 @import './animations.css';
+
+@import 'tailwindcss';
+
+/* Custom theme colors using Tailwind v4 @theme directive */
+@theme {
+  /* Background colors */
+  --color-background: oklch(15% 0.02 270);
+  --color-foreground: oklch(98% 0.01 270);
+
+  /* Card with glassmorphism */
+  --color-card: oklch(20% 0.02 270);
+  --color-card-foreground: oklch(98% 0.01 270);
+
+  /* Primary - vibrant purple */
+  --color-primary: oklch(55% 0.25 280);
+  --color-primary-foreground: oklch(98% 0.01 270);
+
+  /* Secondary - slate */
+  --color-secondary: oklch(25% 0.02 270);
+  --color-secondary-foreground: oklch(98% 0.01 270);
+
+  /* Muted */
+  --color-muted: oklch(25% 0.02 270);
+  --color-muted-foreground: oklch(65% 0.01 270);
+
+  /* Accent - electric blue */
+  --color-accent: oklch(65% 0.2 220);
+  --color-accent-foreground: oklch(98% 0.01 270);
+
+  /* Destructive - vivid red */
+  --color-destructive: oklch(55% 0.25 25);
+  --color-destructive-foreground: oklch(98% 0.01 270);
+
+  /* Success - neon green */
+  --color-success: oklch(55% 0.2 145);
+  --color-success-foreground: oklch(98% 0.01 270);
+
+  /* Warning - warm orange */
+  --color-warning: oklch(70% 0.18 65);
+  --color-warning-foreground: oklch(15% 0.02 270);
+
+  /* Game-specific colors */
+  --color-game-rustam: oklch(55% 0.25 25);
+  --color-game-safe: oklch(55% 0.2 145);
+
+  /* Border and input */
+  --color-border: oklch(30% 0.02 270);
+  --color-input: oklch(25% 0.02 270);
+  --color-ring: oklch(55% 0.25 280);
+
+  /* Border radius */
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-sm: 0.25rem;
+
+  /* Animations */
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px oklch(55% 0.25 280 / 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 40px oklch(55% 0.25 280 / 0.6);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Base styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Gradient backgrounds */
+.bg-gradient-game {
+  background: linear-gradient(135deg,
+      var(--color-background) 0%,
+      oklch(20% 0.08 280) 50%,
+      var(--color-background) 100%);
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center,
+      oklch(22% 0.08 280) 0%,
+      var(--color-background) 70%);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px oklch(55% 0.25 280 / 0.5),
+    0 0 40px oklch(55% 0.25 280 / 0.3);
+}
+
+.text-glow-green {
+  text-shadow: 0 0 20px oklch(55% 0.2 145 / 0.5),
+    0 0 40px oklch(55% 0.2 145 / 0.3);
+}
+
+.text-glow-red {
+  text-shadow: 0 0 20px oklch(55% 0.25 25 / 0.5),
+    0 0 40px oklch(55% 0.25 25 / 0.3);
+}
+
+.card-glow {
+  box-shadow: 0 0 30px oklch(55% 0.25 280 / 0.15),
+    0 4px 20px oklch(0% 0 0 / 0.3);
+}
+
+.card-glass {
+  background: oklch(20% 0.02 270 / 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(30% 0.02 270 / 0.5);
+}
 
 /* Safe area support for notched devices */
 .safe-area-top {
@@ -27,4 +152,35 @@
   .min-h-screen-dynamic {
     min-height: 100dvh;
   }
+}
+
+/* Room code styling */
+.room-code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 30px oklch(55% 0.25 280 / 0.6),
+    0 0 60px oklch(55% 0.25 280 / 0.4);
+}
+
+/* Button shine effect */
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.btn-shine {
+  background: linear-gradient(90deg,
+      transparent 0%,
+      oklch(100% 0 0 / 0.1) 50%,
+      transparent 100%);
+  background-size: 200% 100%;
+}
+
+.btn-shine:hover {
+  animation: shine 1.5s ease-in-out infinite;
 }

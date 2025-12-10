@@ -3,8 +3,12 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useRoom } from '../../hooks/useRoom';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { ArrowLeft, LogIn, AlertCircle } from 'lucide-react';
+import { useRoom } from '@/hooks/useRoom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { PageLayout } from '@/components/game/page-layout';
 
 export const Join = () => {
   const navigate = useNavigate();
@@ -69,81 +73,94 @@ export const Join = () => {
 
   if (isRestoring) {
     return (
-      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 safe-area-top safe-area-bottom">
-        <LoadingSpinner text="Checking session..." />
-      </div>
+      <PageLayout>
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-white text-xl">Checking session...</p>
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
-      <div className="w-full max-w-md pb-4">
-        <h1 className="text-4xl font-bold text-white mb-2 text-center">The Rustam</h1>
-        <p className="text-slate-300 text-center mb-8">Join Game</p>
+    <PageLayout>
+      <div className="w-full max-w-md space-y-6">
+        {/* Header */}
+        <div className="text-center fade-in-up">
+          <h1 className="text-4xl font-bold text-white text-glow mb-1">The Rustam</h1>
+          <p className="text-muted-foreground">Join Game</p>
+        </div>
 
-        <form onSubmit={handleJoin} className="space-y-4">
-          {/* Room Code Input */}
-          <div>
-            <label className="block text-slate-300 text-sm font-semibold mb-2">
-              Room Code
-            </label>
-            <input
-              type="text"
-              inputMode="numeric"
-              maxLength={4}
-              value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-              placeholder="0000"
-              className="w-full px-4 py-3 bg-slate-700 text-white text-center text-2xl tracking-widest rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Join Form Card */}
+        <Card glass className="fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardContent className="p-6">
+            <form onSubmit={handleJoin} className="space-y-6">
+              {/* Room Code Input */}
+              <div>
+                <label className="block text-foreground text-sm font-semibold mb-2">
+                  Room Code
+                </label>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={4}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                  placeholder="0000"
+                  className="text-center text-3xl tracking-[0.3em] font-mono h-16"
+                  error={!!joinError && joinError.includes('code')}
+                />
+              </div>
 
-          {/* Name Input */}
-          <div>
-            <label className="block text-slate-300 text-sm font-semibold mb-2">
-              Your Name
-            </label>
-            <input
-              type="text"
-              maxLength={10}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="First name"
-              className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <p className="text-slate-500 text-xs mt-1">Max 10 characters</p>
-          </div>
+              {/* Name Input */}
+              <div>
+                <label className="block text-foreground text-sm font-semibold mb-2">
+                  Your Name
+                </label>
+                <Input
+                  type="text"
+                  maxLength={10}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="First name"
+                  error={!!joinError && joinError.includes('name')}
+                />
+                <p className="text-muted-foreground text-xs mt-1">Max 10 characters</p>
+              </div>
 
-          {/* Error Message */}
-          {joinError && (
-            <div className="bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg text-sm">
-              {joinError}
-            </div>
-          )}
+              {/* Error Message */}
+              {joinError && (
+                <div className="bg-destructive/20 border border-destructive rounded-lg p-3 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-destructive flex-shrink-0" />
+                  <p className="text-destructive text-sm">{joinError}</p>
+                </div>
+              )}
 
-          {/* Join Button */}
-          <button
-            type="submit"
-            disabled={joining}
-            className={`w-full py-3 px-4 rounded-lg font-bold text-white transition-all active:scale-[0.98] focus-visible ${
-              joining
-                ? 'bg-gray-600 cursor-not-allowed opacity-50'
-                : 'bg-green-500 hover:bg-green-600 cursor-pointer btn-hover'
-            }`}
-          >
-            {joining ? 'Joining...' : 'Join Game'}
-          </button>
+              {/* Join Button */}
+              <Button
+                type="submit"
+                disabled={joining}
+                variant="success"
+                size="xl"
+                className="w-full gap-3"
+              >
+                <LogIn className="w-5 h-5" />
+                {joining ? 'Joining...' : 'Join Game'}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
-          {/* Back Button */}
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="w-full py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
-          >
-            Back to Home
-          </button>
-        </form>
+        {/* Back Button */}
+        <Button
+          onClick={() => navigate('/')}
+          variant="ghost"
+          className="w-full text-muted-foreground"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Button>
       </div>
-    </div>
+    </PageLayout>
   );
 };

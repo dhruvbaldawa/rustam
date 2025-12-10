@@ -51,7 +51,9 @@ describe('Host Lobby', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('1234')).toBeInTheDocument();
+    // Room code appears in the main display and in the help text
+    const roomCodes = screen.getAllByText('1234');
+    expect(roomCodes.length).toBeGreaterThan(0);
   });
 
   it('should show player count', () => {
@@ -61,7 +63,7 @@ describe('Host Lobby', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/2 players/i)).toBeInTheDocument();
+    expect(screen.getByText(/2 joined/i)).toBeInTheDocument();
   });
 
   it('should list all players', () => {
@@ -93,7 +95,7 @@ describe('Host Lobby', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Scan to join/i)).toBeInTheDocument();
+    expect(screen.getByText(/Scan QR or enter code to join/i)).toBeInTheDocument();
   });
 
   it('should navigate to game when Start Game clicked with 2+ players', async () => {
