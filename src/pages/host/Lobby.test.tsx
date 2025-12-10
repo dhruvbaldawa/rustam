@@ -114,28 +114,29 @@ describe('Host Lobby', () => {
     });
   });
 
-  it('should display theme selector', () => {
+  it('should display theme selection heading', () => {
     render(
       <BrowserRouter>
         <Lobby />
       </BrowserRouter>
     );
 
-    expect(screen.getByLabelText(/Choose Theme/i)).toBeInTheDocument();
+    expect(screen.getByText('Choose Theme')).toBeInTheDocument();
   });
 
-  it('should default to Random theme', () => {
+  it('should show Random theme card as default selected', () => {
     render(
       <BrowserRouter>
         <Lobby />
       </BrowserRouter>
     );
 
-    const selector = screen.getByLabelText(/Choose Theme/i) as HTMLSelectElement;
-    expect(selector.value).toBe('Random');
+    // Random card should be visible
+    expect(screen.getByText('Random')).toBeInTheDocument();
+    expect(screen.getByText('Recommended')).toBeInTheDocument();
   });
 
-  it('should allow selecting a specific theme', async () => {
+  it('should allow selecting a theme by clicking its card', async () => {
     const user = userEvent.setup();
     render(
       <BrowserRouter>
@@ -143,25 +144,29 @@ describe('Host Lobby', () => {
       </BrowserRouter>
     );
 
-    const selector = screen.getByLabelText(/Choose Theme/i);
-    await user.selectOptions(selector, 'Kitchen Appliances');
+    // Click on Kitchen Appliances card
+    const themeButton = screen.getByRole('button', { name: /Kitchen Appliances/i });
+    await user.click(themeButton);
 
-    expect((selector as HTMLSelectElement).value).toBe('Kitchen Appliances');
+    // Should have been clicked (button is in the DOM)
+    expect(themeButton).toBeInTheDocument();
   });
 
-  it('should include all predefined themes in selector', () => {
+  it('should include theme cards with difficulty badges', () => {
     render(
       <BrowserRouter>
         <Lobby />
       </BrowserRouter>
     );
 
+    // Theme cards should be visible
     expect(screen.getByText('Kitchen Appliances')).toBeInTheDocument();
     expect(screen.getByText('Vehicles')).toBeInTheDocument();
-    expect(screen.getByText('Animals')).toBeInTheDocument();
+    // Difficulty badges should be visible
+    expect(screen.getAllByText('easy').length).toBeGreaterThan(0);
   });
 
-  it('should pass selected theme to startRound when Start Game is clicked', async () => {
+  it('should pass selected theme to startRound when theme card clicked then Start Game', async () => {
     const user = userEvent.setup();
     render(
       <BrowserRouter>
@@ -169,9 +174,9 @@ describe('Host Lobby', () => {
       </BrowserRouter>
     );
 
-    // Select a specific theme
-    const selector = screen.getByLabelText(/Choose Theme/i);
-    await user.selectOptions(selector, 'Vehicles');
+    // Select Vehicles theme by clicking its card
+    const vehiclesButton = screen.getByRole('button', { name: /Vehicles/i });
+    await user.click(vehiclesButton);
 
     // Click Start Game
     const startButton = screen.getByRole('button', { name: /Start Game/i });

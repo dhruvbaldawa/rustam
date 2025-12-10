@@ -167,7 +167,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
   // Listen to room updates
   const subscribeToRoom = useCallback(
     (roomCode: string): Unsubscribe => {
-      if (!roomCode) return () => {};
+      if (!roomCode) return () => { };
 
       const roomRef = ref(db, `rooms/${roomCode}`);
       const unsubscribeRoom = onValue(
@@ -312,15 +312,33 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
         // Randomly select Rustam
         const rustamUid = playerUids[Math.floor(Math.random() * playerUids.length)];
 
-        // Assign roles to all players
+        // Get options for the theme and shuffle them
+        const { getOptionsForCategory, shuffleArray } = await import('@/lib/gameData');
+        const categoryOptions = getOptionsForCategory(currentTheme);
+        const shuffledOptions = shuffleArray(categoryOptions);
+
+        // Assign roles to all players - each non-Rustam player gets a unique option
         const roomUpdates: Record<string, unknown> = {};
+        let optionIndex = 0;
 
         playerUids.forEach((uid) => {
           const isRustam = uid === rustamUid;
-          roomUpdates[`roles/${uid}`] = {
-            isRustam,
-            theme: isRustam ? null : currentTheme,
-          };
+          if (isRustam) {
+            roomUpdates[`roles/${uid}`] = {
+              isRustam: true,
+              theme: null,
+              option: null,
+            };
+          } else {
+            // Assign a unique option to this player
+            const playerOption = shuffledOptions[optionIndex % shuffledOptions.length];
+            optionIndex++;
+            roomUpdates[`roles/${uid}`] = {
+              isRustam: false,
+              theme: currentTheme,
+              option: playerOption,
+            };
+          }
         });
 
         // Update room status and Rustam ID

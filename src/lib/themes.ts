@@ -1,20 +1,12 @@
 // ABOUTME: Theme definitions and selection utilities
-// ABOUTME: Provides theme list and helper functions for theme selection
+// ABOUTME: Derives theme list from game data JSON
 
-export const THEMES = [
-  'Kitchen Appliances',
-  'Vehicles',
-  'Furniture',
-  'Animals',
-  'Fruits',
-  'Sports Equipment',
-  'Musical Instruments',
-  'Office Supplies',
-  'Board Games',
-  'Snacks',
-] as const;
+import { getThemeNames } from './gameData';
 
-export type Theme = typeof THEMES[number];
+// Get themes from game data
+export const THEMES = getThemeNames();
+
+export type Theme = string;
 
 export const RANDOM_THEME = 'Random' as const;
 

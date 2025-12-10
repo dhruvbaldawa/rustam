@@ -1,0 +1,1787 @@
+{
+  "gameInfo": {
+    "name": "Rustam",
+    "nameHindi": "रुस्तम",
+    "tagline": "Find the hidden one",
+    "taglineHindi": "छुपे हुए को पहचानो",
+    "version": "1.0"
+  },
+  "physicalFormats": {
+    "thumbs": {
+      "name": "Thumbs Up/Down",
+      "nameHindi": "अंगूठा ऊपर/नीचे",
+      "instructions": "Thumbs up = Yes, Thumbs down = No",
+      "instructionsHindi": "अंगूठा ऊपर = हाँ, अंगूठा नीचे = नहीं"
+    },
+    "fingers": {
+      "name": "Show Fingers 1-5",
+      "nameHindi": "1-5 उंगलियाँ दिखाओ",
+      "instructions": "Show 1-5 fingers based on intensity",
+      "instructionsHindi": "1-5 उंगलियाँ दिखाओ"
+    },
+    "stand": {
+      "name": "Stand/Sit",
+      "nameHindi": "खड़े हो/बैठे रहो",
+      "instructions": "Stand = Yes, Stay seated = No",
+      "instructionsHindi": "खड़े हो = हाँ, बैठे रहो = नहीं"
+    },
+    "point": {
+      "name": "Point Left/Right",
+      "nameHindi": "बाएं/दाएं इशारा करो",
+      "instructions": "Point left or right based on choice",
+      "instructionsHindi": "बाएं या दाएं इशारा करो"
+    }
+  },
+  "categories": [
+    {
+      "id": 1,
+      "name": "Kitchen Appliances",
+      "nameHindi": "किचन के उपकरण",
+      "difficulty": "easy",
+      "style": "yours",
+      "styleHindi": "तुम्हारा",
+      "options": [
+        "Mixer-grinder",
+        "Pressure cooker",
+        "Microwave",
+        "Refrigerator",
+        "Gas stove",
+        "Chimney",
+        "Toaster",
+        "Electric kettle",
+        "Induction cooktop",
+        "Water purifier",
+        "Dishwasher",
+        "Air fryer",
+        "Rice cooker",
+        "Hand blender",
+        "Exhaust fan"
+      ],
+      "optionsHindi": [
+        "मिक्सर-ग्राइंडर",
+        "प्रेशर कुकर",
+        "माइक्रोवेव",
+        "फ्रिज",
+        "गैस स्टोव",
+        "चिमनी",
+        "टोस्टर",
+        "इलेक्ट्रिक केतली",
+        "इंडक्शन",
+        "वॉटर प्यूरीफायर",
+        "डिशवॉशर",
+        "एयर फ्रायर",
+        "राइस कुकर",
+        "हैंड ब्लेंडर",
+        "एग्जॉस्ट फैन"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "How often do you use yours?",
+          "questionHindi": "तुम अपना कितनी बार इस्तेमाल करते हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours noisy?",
+          "questionHindi": "क्या तुम्हारा आवाज़ करता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours expensive?",
+          "questionHindi": "क्या तुम्हारा महंगा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "How old is yours?",
+          "questionHindi": "तुम्हारा कितना पुराना है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours Indian or foreign brand?",
+          "questionHindi": "तुम्हारा इंडियन ब्रांड है या विदेशी?"
+        },
+        {
+          "type": "physical",
+          "question": "How essential is yours to your daily routine?",
+          "questionHindi": "तुम्हारी रोज़ की ज़िंदगी में ये कितना ज़रूरी है?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Has yours ever broken down?",
+          "questionHindi": "क्या तुम्हारा कभी खराब हुआ है?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you use yours daily?",
+          "questionHindi": "क्या तुम इसे रोज़ इस्तेमाल करते हो?",
+          "format": "stand"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Did you choose yours or did someone else?",
+          "questionHindi": "तुमने खुद चुना था या किसी और ने?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours bigger than a shoebox?",
+          "questionHindi": "क्या तुम्हारा जूते के डिब्बे से बड़ा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Would you upgrade yours if you could?",
+          "questionHindi": "मौका मिले तो अपग्रेड करोगे?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you need to clean yours regularly?",
+          "questionHindi": "क्या इसे बार-बार साफ करना पड़ता है?"
+        },
+        {
+          "type": "physical",
+          "question": "How upset would you be if yours stopped working tomorrow?",
+          "questionHindi": "कल बंद हो जाए तो कितनी तकलीफ होगी?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours need any consumables or refills?",
+          "questionHindi": "क्या इसमें कुछ भरना या बदलना पड़ता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Could you go a month without yours?",
+          "questionHindi": "एक महीना बिना इसके रह सकते हो?",
+          "format": "thumbs"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Vehicles",
+      "nameHindi": "गाड़ियाँ",
+      "difficulty": "easy",
+      "style": "yours",
+      "styleHindi": "तुम्हारी",
+      "options": [
+        "Car",
+        "Motorcycle",
+        "Auto-rickshaw",
+        "Bicycle",
+        "Scooter",
+        "Bus",
+        "Train",
+        "Airplane",
+        "Metro",
+        "Truck",
+        "Tractor",
+        "E-rickshaw",
+        "Boat",
+        "Helicopter",
+        "Cycle-rickshaw"
+      ],
+      "optionsHindi": [
+        "कार",
+        "मोटरसाइकिल",
+        "ऑटो-रिक्शा",
+        "साइकिल",
+        "स्कूटर",
+        "बस",
+        "ट्रेन",
+        "हवाई जहाज़",
+        "मेट्रो",
+        "ट्रक",
+        "ट्रैक्टर",
+        "ई-रिक्शा",
+        "नाव",
+        "हेलीकॉप्टर",
+        "साइकिल-रिक्शा"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "How often do you use yours?",
+          "questionHindi": "तुम अपनी कितनी बार इस्तेमाल करते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours fast?",
+          "questionHindi": "क्या तुम्हारी तेज़ है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "How many people can fit in yours?",
+          "questionHindi": "तुम्हारी में कितने लोग बैठ सकते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours expensive to maintain?",
+          "questionHindi": "तुम्हारी का खर्चा ज़्यादा है?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you personally own yours?",
+          "questionHindi": "क्या ये तुम्हारी अपनी है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "What color is yours?",
+          "questionHindi": "तुम्हारी किस रंग की है?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours noisy?",
+          "questionHindi": "क्या तुम्हारी आवाज़ करती है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "When did you last use yours?",
+          "questionHindi": "आखिरी बार कब इस्तेमाल की थी?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours comfortable for long distances?",
+          "questionHindi": "लंबे सफर के लिए आरामदायक है?"
+        },
+        {
+          "type": "physical",
+          "question": "Does yours run on fuel?",
+          "questionHindi": "क्या तुम्हारी में पेट्रोल/डीज़ल लगता है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can yours go in bad weather?",
+          "questionHindi": "खराब मौसम में चल सकती है?"
+        },
+        {
+          "type": "physical",
+          "question": "How many wheels does yours have?",
+          "questionHindi": "तुम्हारी में कितने पहिये हैं?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Have you ever had a bad experience with yours?",
+          "questionHindi": "कभी कोई बुरा अनुभव हुआ है इसके साथ?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you need a license or ticket for yours?",
+          "questionHindi": "इसके लिए लाइसेंस या टिकट चाहिए?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours good for a city like Mumbai?",
+          "questionHindi": "मुंबई जैसे शहर के लिए कितनी सही है?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Furniture",
+      "nameHindi": "फर्नीचर",
+      "difficulty": "easy",
+      "style": "yours",
+      "styleHindi": "तुम्हारा",
+      "options": [
+        "Sofa",
+        "Bed",
+        "Dining table",
+        "Almirah",
+        "Dressing table",
+        "TV unit",
+        "Study table",
+        "Bookshelf",
+        "Shoe rack",
+        "Coffee table",
+        "Recliner",
+        "Diwan",
+        "Pooja shelf",
+        "Bar cabinet",
+        "Swing (jhula)"
+      ],
+      "optionsHindi": [
+        "सोफा",
+        "बेड",
+        "डाइनिंग टेबल",
+        "अलमारी",
+        "ड्रेसिंग टेबल",
+        "टीवी यूनिट",
+        "स्टडी टेबल",
+        "किताबों की अलमारी",
+        "शू रैक",
+        "कॉफी टेबल",
+        "रिक्लाइनर",
+        "दीवान",
+        "पूजा की शेल्फ",
+        "बार कैबिनेट",
+        "झूला"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "How often do you use yours?",
+          "questionHindi": "तुम अपना कितनी बार इस्तेमाल करते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours heavy?",
+          "questionHindi": "क्या तुम्हारा भारी है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "What material is yours made of?",
+          "questionHindi": "तुम्हारा किस चीज़ का बना है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "How old is yours?",
+          "questionHindi": "तुम्हारा कितना पुराना है?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you use yours every day?",
+          "questionHindi": "क्या तुम इसे रोज़ इस्तेमाल करते हो?",
+          "format": "stand"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Did you buy yours or was it gifted?",
+          "questionHindi": "खरीदा था या गिफ्ट मिला था?"
+        },
+        {
+          "type": "physical",
+          "question": "How expensive was yours?",
+          "questionHindi": "तुम्हारा कितना महंगा था?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can more than one person use yours at a time?",
+          "questionHindi": "एक साथ एक से ज़्यादा लोग इस्तेमाल कर सकते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Have you ever moved yours to a different spot?",
+          "questionHindi": "कभी जगह बदली है इसकी?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours comfortable?",
+          "questionHindi": "तुम्हारा कितना आरामदायक है?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours modern style or traditional?",
+          "questionHindi": "मॉडर्न स्टाइल है या पुराने ज़माने का?"
+        },
+        {
+          "type": "physical",
+          "question": "Can you sit on yours?",
+          "questionHindi": "क्या इस पर बैठ सकते हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours have storage space inside?",
+          "questionHindi": "इसके अंदर सामान रखने की जगह है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Would a guest notice yours?",
+          "questionHindi": "क्या मेहमान इसे नोटिस करेंगे?"
+        },
+        {
+          "type": "physical",
+          "question": "Could one person lift yours alone?",
+          "questionHindi": "एक आदमी अकेले उठा सकता है?",
+          "format": "thumbs"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Things in Your Wallet/Purse",
+      "nameHindi": "बटुए में रखी चीज़ें",
+      "difficulty": "easy",
+      "style": "yours",
+      "styleHindi": "तुम्हारी",
+      "options": [
+        "Cash",
+        "Debit card",
+        "Credit card",
+        "Aadhar card",
+        "PAN card",
+        "Driving license",
+        "Old receipts",
+        "Visiting cards",
+        "Photos",
+        "Metro card",
+        "Health insurance card",
+        "Coins",
+        "Temple prasad",
+        "Lucky charm",
+        "Bills to pay"
+      ],
+      "optionsHindi": [
+        "नकद पैसे",
+        "डेबिट कार्ड",
+        "क्रेडिट कार्ड",
+        "आधार कार्ड",
+        "पैन कार्ड",
+        "ड्राइविंग लाइसेंस",
+        "पुरानी रसीदें",
+        "विज़िटिंग कार्ड",
+        "फोटो",
+        "मेट्रो कार्ड",
+        "हेल्थ इंश्योरेंस कार्ड",
+        "सिक्के",
+        "मंदिर का प्रसाद",
+        "लकी चार्म",
+        "भरने वाले बिल"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Do you use yours often?",
+          "questionHindi": "क्या तुम इसे अक्सर इस्तेमाल करते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours made of paper?",
+          "questionHindi": "क्या तुम्हारी कागज़ की है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Would you panic if you lost yours?",
+          "questionHindi": "खो जाए तो घबराओगे?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours issued by the government?",
+          "questionHindi": "क्या ये सरकारी है?"
+        },
+        {
+          "type": "physical",
+          "question": "Does yours have your photo on it?",
+          "questionHindi": "क्या इस पर तुम्हारी फोटो है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Have you had yours for more than 5 years?",
+          "questionHindi": "5 साल से ज़्यादा हो गए इसे रखते हुए?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you need yours when you travel?",
+          "questionHindi": "सफर में ज़रूरत पड़ती है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can yours expire?",
+          "questionHindi": "क्या इसकी एक्सपायरी होती है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Did you have to apply for yours?",
+          "questionHindi": "इसके लिए अप्लाई करना पड़ा था?"
+        },
+        {
+          "type": "physical",
+          "question": "How important is yours?",
+          "questionHindi": "तुम्हारी कितनी ज़रूरी है?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does everyone have yours or only some people?",
+          "questionHindi": "सबके पास होती है या सिर्फ कुछ लोगों के पास?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours thin and flat?",
+          "questionHindi": "क्या तुम्हारी पतली और चपटी है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you show yours to others often?",
+          "questionHindi": "दूसरों को अक्सर दिखानी पड़ती है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours sentimental or practical?",
+          "questionHindi": "भावनात्मक है या काम की?"
+        },
+        {
+          "type": "physical",
+          "question": "Would a thief want yours?",
+          "questionHindi": "चोर को तुम्हारी चाहिए होगी?",
+          "format": "thumbs"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Fruits",
+      "nameHindi": "फल",
+      "difficulty": "easy",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो हो",
+      "options": [
+        "Mango",
+        "Banana",
+        "Apple",
+        "Papaya",
+        "Chikoo",
+        "Guava",
+        "Watermelon",
+        "Grapes",
+        "Pomegranate",
+        "Orange",
+        "Coconut",
+        "Litchi",
+        "Custard apple",
+        "Jackfruit",
+        "Pineapple"
+      ],
+      "optionsHindi": [
+        "आम",
+        "केला",
+        "सेब",
+        "पपीता",
+        "चीकू",
+        "अमरूद",
+        "तरबूज़",
+        "अंगूर",
+        "अनार",
+        "संतरा",
+        "नारियल",
+        "लीची",
+        "सीताफल",
+        "कटहल",
+        "अनानास"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Are you seasonal or available year-round?",
+          "questionHindi": "तुम सीज़नल हो या साल भर मिलते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you sweet?",
+          "questionHindi": "क्या तुम मीठे हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "What color are you?",
+          "questionHindi": "तुम किस रंग के हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you grown in India or mostly imported?",
+          "questionHindi": "इंडिया में उगते हो या बाहर से आते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you bigger than a cricket ball?",
+          "questionHindi": "क्या तुम क्रिकेट बॉल से बड़े हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do people need to peel you before eating?",
+          "questionHindi": "खाने से पहले छीलना पड़ता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you messy to eat?",
+          "questionHindi": "खाने में गंदगी होती है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have seeds?",
+          "questionHindi": "तुम्हारे अंदर बीज हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you expensive?",
+          "questionHindi": "क्या तुम महंगे हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you a common choice for juice?",
+          "questionHindi": "जूस के लिए लोग तुम्हें चुनते हैं?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can you be used in cooking or desserts?",
+          "questionHindi": "खाना बनाने या मिठाई में इस्तेमाल होते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "How popular are you in India?",
+          "questionHindi": "इंडिया में कितने पॉपुलर हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do kids like you?",
+          "questionHindi": "बच्चों को तुम पसंद हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have a strong smell?",
+          "questionHindi": "तुम्हारी तेज़ खुशबू है?"
+        },
+        {
+          "type": "physical",
+          "question": "Can you be eaten in one bite?",
+          "questionHindi": "एक बाइट में खा सकते हैं?",
+          "format": "thumbs"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Indian Sweets / Mithai",
+      "nameHindi": "मिठाई",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो हो",
+      "options": [
+        "Gulab jamun",
+        "Rasgulla",
+        "Jalebi",
+        "Barfi",
+        "Ladoo",
+        "Kaju katli",
+        "Peda",
+        "Rasmalai",
+        "Sandesh",
+        "Mysore pak",
+        "Soan papdi",
+        "Balushahi",
+        "Ghevar",
+        "Imarti",
+        "Kheer"
+      ],
+      "optionsHindi": [
+        "गुलाब जामुन",
+        "रसगुल्ला",
+        "जलेबी",
+        "बर्फी",
+        "लड्डू",
+        "काजू कतली",
+        "पेड़ा",
+        "रसमलाई",
+        "संदेश",
+        "मैसूर पाक",
+        "सोन पापड़ी",
+        "बालूशाही",
+        "घेवर",
+        "इमरती",
+        "खीर"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "What color are you?",
+          "questionHindi": "तुम किस रंग के हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you round?",
+          "questionHindi": "क्या तुम गोल हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you fried?",
+          "questionHindi": "क्या तुम्हें तला जाता है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you served hot or cold?",
+          "questionHindi": "गरम परोसे जाते हो या ठंडे?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you soaked in syrup?",
+          "questionHindi": "क्या तुम चाशनी में भीगे हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Which part of India are you most famous in?",
+          "questionHindi": "इंडिया के किस हिस्से में ज़्यादा फेमस हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you served at weddings?",
+          "questionHindi": "शादियों में परोसे जाते हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can you last more than a week without refrigeration?",
+          "questionHindi": "बिना फ्रिज के हफ्ते भर टिक सकते हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you made with milk or khoya?",
+          "questionHindi": "दूध या खोये से बने हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you very rich and heavy?",
+          "questionHindi": "कितने भारी और गरिष्ठ हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can someone eat more than one of you in a sitting?",
+          "questionHindi": "एक बार में एक से ज़्यादा खा सकते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you commonly given as a gift?",
+          "questionHindi": "गिफ्ट में दिए जाते हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you dry or have liquid/syrup?",
+          "questionHindi": "सूखे हो या रसदार?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have nuts or dry fruits in you?",
+          "questionHindi": "तुम्हारे अंदर मेवे हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Would health-conscious people avoid you?",
+          "questionHindi": "हेल्थ-कॉन्शस लोग तुमसे बचेंगे?",
+          "format": "thumbs"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Indian Street Food",
+      "nameHindi": "स्ट्रीट फूड",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो हो",
+      "options": [
+        "Pani puri",
+        "Vada pav",
+        "Chaat",
+        "Samosa",
+        "Dosa",
+        "Pav bhaji",
+        "Chole bhature",
+        "Kathi roll",
+        "Dabeli",
+        "Bhel puri",
+        "Momos",
+        "Aloo tikki",
+        "Jalebi",
+        "Kachori",
+        "Egg roll"
+      ],
+      "optionsHindi": [
+        "पानी पूरी",
+        "वड़ा पाव",
+        "चाट",
+        "समोसा",
+        "डोसा",
+        "पाव भाजी",
+        "छोले भटूरे",
+        "काठी रोल",
+        "दाबेली",
+        "भेल पूरी",
+        "मोमोज़",
+        "आलू टिक्की",
+        "जलेबी",
+        "कचौरी",
+        "एग रोल"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Are you spicy?",
+          "questionHindi": "क्या तुम तीखे हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you messy to eat?",
+          "questionHindi": "खाने में गंदगी होती है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you served hot?",
+          "questionHindi": "गरम परोसे जाते हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Which city are you most famous in?",
+          "questionHindi": "किस शहर में सबसे फेमस हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you fried?",
+          "questionHindi": "क्या तुम तले हुए हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can you be eaten while standing or walking?",
+          "questionHindi": "खड़े-खड़े या चलते-चलते खा सकते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "How filling are you?",
+          "questionHindi": "कितना पेट भरते हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you come with chutney?",
+          "questionHindi": "चटनी के साथ आते हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you vegetarian?",
+          "questionHindi": "क्या तुम वेज हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you sweet?",
+          "questionHindi": "क्या तुम मीठे हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do people eat you with hands or utensils?",
+          "questionHindi": "हाथ से खाते हैं या चम्मच से?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you cheap — under 50 rupees?",
+          "questionHindi": "सस्ते हो — 50 रुपये से कम?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you better enjoyed in a particular season?",
+          "questionHindi": "किसी खास मौसम में ज़्यादा मज़ा आता है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you crunchy?",
+          "questionHindi": "क्या तुम कुरकुरे हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you something people crave often?",
+          "questionHindi": "लोगों को कितनी क्रेविंग होती है?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Bollywood Movies",
+      "nameHindi": "बॉलीवुड फिल्में",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो फिल्म हो",
+      "options": [
+        "Sholay",
+        "DDLJ",
+        "3 Idiots",
+        "Lagaan",
+        "Dil Chahta Hai",
+        "Kabhi Khushi Kabhie Gham",
+        "Zindagi Na Milegi Dobara",
+        "Dangal",
+        "PK",
+        "Jab We Met",
+        "Rang De Basanti",
+        "Gangs of Wasseypur",
+        "Queen",
+        "Andaz Apna Apna",
+        "Gully Boy"
+      ],
+      "optionsHindi": [
+        "शोले",
+        "दिलवाले दुल्हनिया ले जाएंगे",
+        "3 इडियट्स",
+        "लगान",
+        "दिल चाहता है",
+        "कभी खुशी कभी ग़म",
+        "ज़िंदगी ना मिलेगी दोबारा",
+        "दंगल",
+        "पीके",
+        "जब वी मेट",
+        "रंग दे बसंती",
+        "गैंग्स ऑफ वासेपुर",
+        "क्वीन",
+        "अंदाज़ अपना अपना",
+        "गली बॉय"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Are you more than 20 years old?",
+          "questionHindi": "क्या तुम 20 साल से पुरानी हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Were you a box office hit?",
+          "questionHindi": "बॉक्स ऑफिस पर हिट थी?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do people cry during you?",
+          "questionHindi": "लोग तुम्हें देखकर रोते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have a memorable villain?",
+          "questionHindi": "तुम्हारा विलेन यादगार है?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you longer than 2.5 hours?",
+          "questionHindi": "ढाई घंटे से लंबी हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are your songs still popular?",
+          "questionHindi": "तुम्हारे गाने अभी भी बजते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you funny?",
+          "questionHindi": "कितनी फनी हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you set mostly in India or abroad?",
+          "questionHindi": "इंडिया में सेट हो या विदेश में?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is your hero a common man or someone extraordinary?",
+          "questionHindi": "तुम्हारा हीरो आम आदमी है या कुछ खास?"
+        },
+        {
+          "type": "physical",
+          "question": "Would parents watch you with their kids?",
+          "questionHindi": "पैरेंट्स बच्चों के साथ देख सकते हैं?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Did you win major awards?",
+          "questionHindi": "बड़े अवॉर्ड्स जीते?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you romantic?",
+          "questionHindi": "कितनी रोमांटिक हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is Shah Rukh Khan or Aamir Khan in you?",
+          "questionHindi": "शाहरुख या आमिर खान हैं तुममें?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can people quote your dialogues?",
+          "questionHindi": "लोग तुम्हारे डायलॉग बोलते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Would someone in their 20s enjoy you today?",
+          "questionHindi": "आज के 20 साल के लोग एन्जॉय करेंगे?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Indian TV Shows",
+      "nameHindi": "टीवी सीरियल",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो शो हो",
+      "options": [
+        "Taarak Mehta Ka Ooltah Chashmah",
+        "CID",
+        "Kyunki Saas Bhi Kabhi Bahu Thi",
+        "Balika Vadhu",
+        "Bigg Boss",
+        "Kaun Banega Crorepati",
+        "Sarabhai vs Sarabhai",
+        "Office Office",
+        "Crime Patrol",
+        "Ramayan (1987)",
+        "Mahabharat",
+        "Scam 1992",
+        "Sacred Games",
+        "Mirzapur",
+        "Panchayat"
+      ],
+      "optionsHindi": [
+        "तारक मेहता का उल्टा चश्मा",
+        "सीआईडी",
+        "क्योंकि सास भी कभी बहू थी",
+        "बालिका वधू",
+        "बिग बॉस",
+        "कौन बनेगा करोड़पति",
+        "साराभाई vs साराभाई",
+        "ऑफिस ऑफिस",
+        "क्राइम पेट्रोल",
+        "रामायण (1987)",
+        "महाभारत",
+        "स्कैम 1992",
+        "सेक्रेड गेम्स",
+        "मिर्ज़ापुर",
+        "पंचायत"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Are you more than 10 years old?",
+          "questionHindi": "क्या तुम 10 साल से पुराने हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you still running?",
+          "questionHindi": "अभी भी चल रहे हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you on streaming or traditional broadcast?",
+          "questionHindi": "स्ट्रीमिंग पर हो या टीवी पर?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do families sit together and enjoy you?",
+          "questionHindi": "पूरा परिवार साथ बैठकर देखता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you funny?",
+          "questionHindi": "कितने फनी हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have more than 100 episodes?",
+          "questionHindi": "100 से ज़्यादा एपिसोड हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you dramatic?",
+          "questionHindi": "कितने ड्रामेटिक हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Would your grandparents watch you?",
+          "questionHindi": "दादा-दादी देखेंगे तुम्हें?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have a famous host or lead actor?",
+          "questionHindi": "कोई फेमस होस्ट या एक्टर है?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you have violence or adult content?",
+          "questionHindi": "मारपीट या एडल्ट कंटेंट है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you based on true events?",
+          "questionHindi": "सच्ची घटना पर बने हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you bingeable?",
+          "questionHindi": "एक साथ कई एपिसोड देखने का मन करता है?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you more popular with older or younger audiences?",
+          "questionHindi": "बड़ों में पॉपुलर हो या जवानों में?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are your episodes daily or weekly?",
+          "questionHindi": "एपिसोड रोज़ आते हैं या हफ्ते में?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you iconic — would most Indians recognize you?",
+          "questionHindi": "इतने आइकॉनिक हो कि सब पहचानें?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Indian Festivals",
+      "nameHindi": "त्योहार",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो त्योहार हो",
+      "options": [
+        "Diwali",
+        "Holi",
+        "Eid",
+        "Ganesh Chaturthi",
+        "Navratri",
+        "Durga Puja",
+        "Raksha Bandhan",
+        "Karwa Chauth",
+        "Janmashtami",
+        "Onam",
+        "Pongal",
+        "Baisakhi",
+        "Christmas",
+        "Makar Sankranti",
+        "Chhath Puja"
+      ],
+      "optionsHindi": [
+        "दिवाली",
+        "होली",
+        "ईद",
+        "गणेश चतुर्थी",
+        "नवरात्रि",
+        "दुर्गा पूजा",
+        "रक्षा बंधन",
+        "करवा चौथ",
+        "जन्माष्टमी",
+        "ओणम",
+        "पोंगल",
+        "बैसाखी",
+        "क्रिसमस",
+        "मकर संक्रांति",
+        "छठ पूजा"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Which month do you usually fall in?",
+          "questionHindi": "किस महीने आते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you loud and noisy?",
+          "questionHindi": "शोर-शराबे वाले हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do people get official holidays for you?",
+          "questionHindi": "सरकारी छुट्टी मिलती है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you celebrated all over India or specific regions?",
+          "questionHindi": "पूरे इंडिया में मनाते हैं या कुछ जगहों पर?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you involve special sweets or food?",
+          "questionHindi": "खास मिठाई या खाना बनता है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you more for families or friends?",
+          "questionHindi": "परिवार के साथ मनाते हैं या दोस्तों के साथ?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you colorful?",
+          "questionHindi": "कितने रंगीन हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do people buy new clothes for you?",
+          "questionHindi": "नए कपड़े खरीदते हैं तुम्हारे लिए?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you involve fasting?",
+          "questionHindi": "उपवास रखना पड़ता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you involve fire, lamps, or lights?",
+          "questionHindi": "आग, दीये या रोशनी का हिस्सा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you last more than one day?",
+          "questionHindi": "एक दिन से ज़्यादा चलते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you messy or chaotic?",
+          "questionHindi": "गड़बड़ और अफरा-तफरी वाले हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is there a specific food strongly associated with you?",
+          "questionHindi": "कोई खास खाना जुड़ा है तुमसे?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you religious, cultural, or both?",
+          "questionHindi": "धार्मिक हो, सांस्कृतिक, या दोनों?"
+        },
+        {
+          "type": "physical",
+          "question": "How much do kids love you?",
+          "questionHindi": "बच्चे कितना प्यार करते हैं?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Mobile Apps",
+      "nameHindi": "मोबाइल ऐप्स",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो ऐप हो",
+      "options": [
+        "WhatsApp",
+        "Paytm",
+        "Zomato",
+        "Swiggy",
+        "Amazon",
+        "Flipkart",
+        "Instagram",
+        "YouTube",
+        "Google Maps",
+        "Ola/Uber",
+        "PhonePe",
+        "Hotstar",
+        "Netflix",
+        "Zerodha",
+        "IRCTC"
+      ],
+      "optionsHindi": [
+        "व्हाट्सऐप",
+        "पेटीएम",
+        "ज़ोमैटो",
+        "स्विगी",
+        "अमेज़न",
+        "फ्लिपकार्ट",
+        "इंस्टाग्राम",
+        "यूट्यूब",
+        "गूगल मैप्स",
+        "ओला/उबर",
+        "फोनपे",
+        "हॉटस्टार",
+        "नेटफ्लिक्स",
+        "ज़ेरोधा",
+        "आईआरसीटीसी"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "How many times a day do people open you?",
+          "questionHindi": "दिन में कितनी बार खोलते हैं लोग?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you send a lot of notifications?",
+          "questionHindi": "बहुत नोटिफिकेशन भेजते हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do people spend money through you?",
+          "questionHindi": "तुमसे पैसे खर्च होते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you used for entertainment or utility?",
+          "questionHindi": "मनोरंजन के लिए हो या काम के लिए?"
+        },
+        {
+          "type": "physical",
+          "question": "Would your parents use you?",
+          "questionHindi": "तुम्हारे पैरेंट्स इस्तेमाल करते हैं?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can someone delete you and survive fine?",
+          "questionHindi": "डिलीट कर दें तो चल जाएगा?"
+        },
+        {
+          "type": "physical",
+          "question": "Do you drain battery quickly?",
+          "questionHindi": "बैटरी जल्दी खत्म करते हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you have ads?",
+          "questionHindi": "तुममें ऐड्स आते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you used mostly at home or on the go?",
+          "questionHindi": "घर पर ज़्यादा इस्तेमाल होते हो या बाहर?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you addictive?",
+          "questionHindi": "कितने एडिक्टिव हो?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you require login or account?",
+          "questionHindi": "लॉगिन या अकाउंट बनाना पड़ता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you free to use?",
+          "questionHindi": "फ्री हो इस्तेमाल करने के लिए?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you social — do you connect with other people?",
+          "questionHindi": "सोशल हो — दूसरों से कनेक्ट करते हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you Indian-made?",
+          "questionHindi": "इंडियन कंपनी ने बनाया है?"
+        },
+        {
+          "type": "physical",
+          "question": "How essential are you for daily life?",
+          "questionHindi": "रोज़ की ज़िंदगी में कितने ज़रूरी हो?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Tourist Places in India",
+      "nameHindi": "भारत की टूरिस्ट जगहें",
+      "difficulty": "medium",
+      "style": "youAreIt",
+      "styleHindi": "तुम वो जगह हो",
+      "options": [
+        "Taj Mahal",
+        "Goa beaches",
+        "Jaipur",
+        "Kerala backwaters",
+        "Varanasi ghats",
+        "Ladakh",
+        "Shimla",
+        "Manali",
+        "Rishikesh",
+        "Udaipur",
+        "Darjeeling",
+        "Hampi",
+        "Amritsar Golden Temple",
+        "Ooty",
+        "Andaman Islands"
+      ],
+      "optionsHindi": [
+        "ताज महल",
+        "गोवा के बीच",
+        "जयपुर",
+        "केरला बैकवाटर्स",
+        "वाराणसी के घाट",
+        "लद्दाख",
+        "शिमला",
+        "मनाली",
+        "ऋषिकेश",
+        "उदयपुर",
+        "दार्जिलिंग",
+        "हम्पी",
+        "अमृतसर गोल्डन टेम्पल",
+        "ऊटी",
+        "अंडमान आइलैंड्स"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Are you in North India or South India?",
+          "questionHindi": "नॉर्थ इंडिया में हो या साउथ में?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you crowded with tourists?",
+          "questionHindi": "टूरिस्टों की भीड़ रहती है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you near mountains or water?",
+          "questionHindi": "पहाड़ों के पास हो या पानी के?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "What's the best season to visit you?",
+          "questionHindi": "किस मौसम में आना सबसे अच्छा है?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you expensive to visit?",
+          "questionHindi": "आना महंगा पड़ता है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you historical or natural beauty?",
+          "questionHindi": "ऐतिहासिक हो या प्राकृतिक सुंदरता?"
+        },
+        {
+          "type": "physical",
+          "question": "Do foreigners visit you often?",
+          "questionHindi": "विदेशी लोग आते हैं?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can you be visited in a day trip or need multiple days?",
+          "questionHindi": "एक दिन में घूम सकते हैं या कई दिन लगते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you famous for any particular food?",
+          "questionHindi": "किसी खाने के लिए फेमस हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you Instagram-worthy?",
+          "questionHindi": "इंस्टाग्राम फोटो के लिए कितने बढ़िया?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can you reach there easily by train?",
+          "questionHindi": "ट्रेन से आसानी से पहुँच सकते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Are you a honeymoon destination?",
+          "questionHindi": "हनीमून वाली जगह हो?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you religious or spiritual?",
+          "questionHindi": "धार्मिक या आध्यात्मिक जगह हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Are you cold or hot most of the year?",
+          "questionHindi": "ज़्यादातर ठंडी जगह हो या गर्म?"
+        },
+        {
+          "type": "physical",
+          "question": "Should everyone visit you at least once?",
+          "questionHindi": "सबको एक बार तो आना चाहिए?",
+          "format": "fingers"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Monsoon Things",
+      "nameHindi": "बारिश की बातें",
+      "difficulty": "hard",
+      "style": "yours",
+      "styleHindi": "तुम्हारा/तुम्हारी",
+      "options": [
+        "Umbrella",
+        "Chai",
+        "Pakoras",
+        "Raincoat",
+        "Puddles",
+        "Traffic jams",
+        "Power cuts",
+        "Muddy roads",
+        "Waterlogging",
+        "Mosquitoes",
+        "Petrichor (mitti ki khushboo)",
+        "Garam samosa",
+        "Leaking roof",
+        "Mumbai local delays",
+        "Baarish ke gaane"
+      ],
+      "optionsHindi": [
+        "छाता",
+        "चाय",
+        "पकोड़े",
+        "रेनकोट",
+        "गड्ढों में पानी",
+        "ट्रैफिक जाम",
+        "बिजली कटना",
+        "कीचड़ भरी सड़कें",
+        "जलभराव",
+        "मच्छर",
+        "मिट्टी की खुशबू",
+        "गरम समोसा",
+        "छत से टपकना",
+        "मुंबई लोकल की देरी",
+        "बारिश के गाने"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Do people enjoy yours?",
+          "questionHindi": "लोग इसे एन्जॉय करते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours annoying?",
+          "questionHindi": "परेशान करने वाला है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you experience yours at home or outside?",
+          "questionHindi": "घर पर होता है या बाहर?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours more common in some cities than others?",
+          "questionHindi": "कुछ शहरों में ज़्यादा होता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours something you can touch?",
+          "questionHindi": "छू सकते हो इसे?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours happen every day during the season?",
+          "questionHindi": "सीज़न में रोज़ होता है?"
+        },
+        {
+          "type": "physical",
+          "question": "How much do you personally like yours?",
+          "questionHindi": "तुम्हें खुद कितना पसंद है?",
+          "format": "fingers"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Can yours be avoided if you try?",
+          "questionHindi": "कोशिश करो तो बच सकते हो?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours affect your commute?",
+          "questionHindi": "आने-जाने में दिक्कत होती है?"
+        },
+        {
+          "type": "physical",
+          "question": "Does yours involve consuming something?",
+          "questionHindi": "कुछ खाने-पीने से जुड़ा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours comforting or frustrating?",
+          "questionHindi": "सुकून देता है या परेशान करता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours visible?",
+          "questionHindi": "दिखाई देता है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours happen indoors or outdoors?",
+          "questionHindi": "अंदर होता है या बाहर?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours cost you money?",
+          "questionHindi": "पैसे खर्च होते हैं?"
+        },
+        {
+          "type": "physical",
+          "question": "Would you miss yours if the season never came?",
+          "questionHindi": "सीज़न न आए तो याद आएगी?",
+          "format": "thumbs"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Things in a Puja Room",
+      "nameHindi": "पूजा घर की चीज़ें",
+      "difficulty": "hard",
+      "style": "yours",
+      "styleHindi": "तुम्हारा/तुम्हारी",
+      "options": [
+        "Diya",
+        "Agarbatti",
+        "Murti",
+        "Prasad",
+        "Ghanti (bell)",
+        "Thali",
+        "Kalash",
+        "Chandan",
+        "Sindoor",
+        "Gangajal",
+        "Tulsi plant",
+        "Coconut",
+        "Aarti book",
+        "Photo frames of gods",
+        "Camphor (kapoor)"
+      ],
+      "optionsHindi": [
+        "दीया",
+        "अगरबत्ती",
+        "मूर्ति",
+        "प्रसाद",
+        "घंटी",
+        "थाली",
+        "कलश",
+        "चंदन",
+        "सिंदूर",
+        "गंगाजल",
+        "तुलसी का पौधा",
+        "नारियल",
+        "आरती की किताब",
+        "भगवान की फोटो",
+        "कपूर"
+      ],
+      "questions": [
+        {
+          "type": "hotSeat",
+          "question": "Do you interact with yours every day?",
+          "questionHindi": "रोज़ इस्तेमाल करते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "Does yours make a sound?",
+          "questionHindi": "आवाज़ करता है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you need to replace or refill yours often?",
+          "questionHindi": "बार-बार बदलना या भरना पड़ता है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours used during aarti?",
+          "questionHindi": "आरती में इस्तेमाल होता है?"
+        },
+        {
+          "type": "physical",
+          "question": "Can yours be consumed?",
+          "questionHindi": "खा सकते हो इसे?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Does yours have a distinct smell?",
+          "questionHindi": "इसकी अलग खुशबू है?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours expensive?",
+          "questionHindi": "महंगा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours made of metal?",
+          "questionHindi": "धातु का बना है?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you use yours only on special occasions or daily?",
+          "questionHindi": "खास मौकों पर ही या रोज़ इस्तेमाल?"
+        },
+        {
+          "type": "physical",
+          "question": "Does yours involve flame or fire?",
+          "questionHindi": "आग या लौ से जुड़ा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Would you find yours in every household?",
+          "questionHindi": "हर घर में मिलेगा?"
+        },
+        {
+          "type": "physical",
+          "question": "Is yours bigger than your palm?",
+          "questionHindi": "हथेली से बड़ा है?",
+          "format": "thumbs"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Is yours offered to God or used as a tool for rituals?",
+          "questionHindi": "भगवान को चढ़ाते हैं या पूजा में इस्तेमाल करते हैं?"
+        },
+        {
+          "type": "hotSeat",
+          "question": "Do you buy yours from a shop or get it from a temple?",
+          "questionHindi": "दुकान से खरीदते हो या मंदिर से लाते हो?"
+        },
+        {
+          "type": "physical",
+          "question": "How essential is yours for the rituals?",
+          "questionHindi": "पूजा के लिए कितना ज़रूरी है?",
+          "format": "fingers"
+        }
+      ]
+    }
+  ]
+}

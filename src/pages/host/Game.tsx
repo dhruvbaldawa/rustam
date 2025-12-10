@@ -1,13 +1,14 @@
-// ABOUTME: Host game screen showing Rustam identity
-// ABOUTME: Host can reveal Rustam and proceed to next round
+// ABOUTME: Host game screen with question viewer
+// ABOUTME: Host can reveal Rustam and proceed to next round, sees questions not Rustam identity
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Eye, SkipForward, XCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Eye, SkipForward, XCircle, AlertCircle, Mic, Hand, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRoom } from '@/hooks/useRoom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageLayout } from '@/components/game/page-layout';
+import { getQuestionsForCategory, getPhysicalFormatInfo, Question, PhysicalQuestion } from '@/lib/gameData';
 
 interface LocationState {
   roomCode: string;
@@ -17,12 +18,15 @@ export const Game = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { room, players, revealRustam, nextRound, endGame, subscribeToRoom, error } = useRoom();
-  const [rustamName, setRustamName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [operationLoading, setOperationLoading] = useState(false);
   const [operationError, setOperationError] = useState<string | null>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const roomCode = (location.state as LocationState)?.roomCode || room?.code;
+
+  // Get questions for the current theme
+  const questions = room?.currentTheme ? getQuestionsForCategory(room.currentTheme) : [];
 
   useEffect(() => {
     if (roomCode) {
@@ -32,15 +36,10 @@ export const Game = () => {
     }
   }, [roomCode, subscribeToRoom]);
 
-  // Fetch Rustam name
+  // Reset question index when theme changes
   useEffect(() => {
-    if (room?.rustamUid && players.length > 0) {
-      const rustam = players.find((p) => p.uid === room.rustamUid);
-      if (rustam) {
-        setRustamName(rustam.name);
-      }
-    }
-  }, [room?.rustamUid, players]);
+    setCurrentQuestionIndex(0);
+  }, [room?.currentTheme]);
 
   // Navigate to game over when game ends
   useEffect(() => {
@@ -104,6 +103,23 @@ export const Game = () => {
     }
   };
 
+  const handlePrevQuestion = () => {
+    setCurrentQuestionIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextQuestion = () => {
+    setCurrentQuestionIndex((prev) => Math.min(questions.length - 1, prev + 1));
+  };
+
+  // Get format display info for physical questions
+  const getFormatBadge = (question: Question) => {
+    if (question.type === 'physical') {
+      const formatInfo = getPhysicalFormatInfo((question as PhysicalQuestion).format);
+      return formatInfo?.name || (question as PhysicalQuestion).format;
+    }
+    return null;
+  };
+
   if (loading || !room) {
     return (
       <PageLayout>
@@ -117,6 +133,10 @@ export const Game = () => {
 
   const isRevealed = room.status === 'revealed';
   const displayError = error || operationError;
+  const currentQuestion = questions[currentQuestionIndex];
+
+  // Find Rustam name for the revealed state
+  const rustamName = players.find((p) => p.uid === room.rustamUid)?.name || 'Unknown';
 
   return (
     <PageLayout>
@@ -126,6 +146,9 @@ export const Game = () => {
           <p className="text-muted-foreground text-sm mb-1">Round {room.currentRound}</p>
           <p className="text-xl font-semibold text-foreground">
             Theme: <span className="text-accent">{room.currentTheme || 'Loading...'}</span>
+          </p>
+          <p className="text-muted-foreground text-xs mt-1">
+            {players.length} players
           </p>
         </div>
 
@@ -141,16 +164,71 @@ export const Game = () => {
 
         {!isRevealed ? (
           <>
-            {/* Rustam Identity Card - Pre-Reveal */}
-            <Card glass glow className="fade-in-up" style={{ animationDelay: '50ms' }}>
-              <CardContent className="p-8 text-center">
-                <p className="text-muted-foreground text-sm mb-2">The Rustam is</p>
-                <p className="text-4xl font-bold text-white text-glow">
-                  {rustamName || 'Selecting...'}
-                </p>
-                <p className="text-xs text-muted-foreground mt-4">Only you can see this</p>
-              </CardContent>
-            </Card>
+            {/* Question Viewer Card */}
+            {currentQuestion && (
+              <Card glass glow className="fade-in-up" style={{ animationDelay: '50ms' }}>
+                <CardContent className="p-6">
+                  {/* Question Type Badge */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {currentQuestion.type === 'hotSeat' ? (
+                        <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                          <Mic className="w-3 h-3" />
+                          Hotseat
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                          <Hand className="w-3 h-3" />
+                          Physical
+                        </span>
+                      )}
+                      {currentQuestion.type === 'physical' && (
+                        <span className="text-xs text-muted-foreground">
+                          {getFormatBadge(currentQuestion)}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {currentQuestionIndex + 1} / {questions.length}
+                    </span>
+                  </div>
+
+                  {/* Question Text - Hindi (primary) + English (secondary) */}
+                  <div className="text-center min-h-[100px] flex flex-col items-center justify-center gap-2">
+                    <p className="text-xl font-medium text-white">
+                      {currentQuestion.questionHindi}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {currentQuestion.question}
+                    </p>
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex items-center justify-between mt-6">
+                    <Button
+                      onClick={handlePrevQuestion}
+                      disabled={currentQuestionIndex === 0}
+                      variant="ghost"
+                      size="sm"
+                      className="gap-1"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Prev
+                    </Button>
+                    <Button
+                      onClick={handleNextQuestion}
+                      disabled={currentQuestionIndex === questions.length - 1}
+                      variant="ghost"
+                      size="sm"
+                      className="gap-1"
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Reveal Button */}
             <Button

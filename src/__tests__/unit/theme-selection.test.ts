@@ -10,7 +10,7 @@ describe('Theme Selection', () => {
     it('should contain expected theme categories', () => {
       expect(THEMES).toContain('Kitchen Appliances');
       expect(THEMES).toContain('Vehicles');
-      expect(THEMES).toContain('Animals');
+      expect(THEMES).toContain('Fruits');
     });
 
     it('should have all unique themes', () => {

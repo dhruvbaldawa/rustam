@@ -63,14 +63,15 @@ describe('Host Game Screen', () => {
     expect(screen.getByText(/Kitchen Appliances/i)).toBeInTheDocument();
   });
 
-  it('should show Rustam name when status is active', () => {
+  it('should show question viewer when status is active', () => {
     render(
       <BrowserRouter>
         <Game />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Alice')).toBeInTheDocument();
+    // Host should see question navigation, not Rustam name
+    expect(screen.getByText('Hotseat')).toBeInTheDocument();
   });
 
   it('should have Reveal Rustam button when not revealed', () => {
