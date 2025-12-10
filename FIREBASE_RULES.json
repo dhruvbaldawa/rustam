@@ -4,7 +4,6 @@
       "$roomCode": {
         ".read": "auth.uid !== null",
         ".write": "data.child('hostUid').val() === auth.uid || !data.exists()",
-        ".validate": "newData.hasChildren(['hostUid', 'status', 'currentRound', 'totalRounds']) || !data.exists()",
 
         "hostUid": {
           ".write": "!data.exists()"
@@ -17,7 +16,7 @@
 
         "currentRound": {
           ".write": "data.parent().child('hostUid').val() === auth.uid",
-          ".validate": "newData.isNumber() && newData.val() >= 1"
+          ".validate": "newData.isNumber() && newData.val() >= 0"
         },
 
         "totalRounds": {
@@ -65,6 +64,10 @@
             },
 
             "theme": {
+              ".validate": "newData.isString() || newData.val() === null"
+            },
+
+            "option": {
               ".validate": "newData.isString() || newData.val() === null"
             }
           }

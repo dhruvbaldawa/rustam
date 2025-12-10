@@ -114,12 +114,16 @@ export const RoleReveal = () => {
     );
   }
 
+  // Use subtle, similar colors so eavesdroppers can't distinguish Rustam from regular players
+  // Both use dark purple/indigo tones - only the player knows their role
+  const backgroundColor = role.isRustam
+    ? 'oklch(35% 0.12 280)' // Deep purple (Rustam)
+    : 'oklch(38% 0.10 260)'; // Slightly different indigo (safe player)
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 transition-all duration-500 safe-area-top safe-area-bottom"
-      style={{
-        backgroundColor: role.isRustam ? 'oklch(50% 0.22 25)' : 'oklch(50% 0.18 145)',
-      }}
+      style={{ backgroundColor }}
     >
       <div className="w-full max-w-md text-center role-reveal">
         {role.isRustam ? (
@@ -128,10 +132,10 @@ export const RoleReveal = () => {
             <div className="mb-6 fade-in-up">
               <span className="text-6xl md:text-7xl">🎭</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 fade-in-up text-glow-red">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 fade-in-up">
               YOU ARE THE
             </h1>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 fade-in-up role-pulse text-glow-red">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 fade-in-up role-pulse">
               RUSTAM
             </h2>
             <div className="space-y-2 fade-in-up" style={{ animationDelay: '200ms' }}>
@@ -145,8 +149,9 @@ export const RoleReveal = () => {
             <div className="mb-6 fade-in-up">
               <span className="text-6xl md:text-7xl">✨</span>
             </div>
+            <p className="text-white/60 text-sm md:text-base mb-1 fade-in-up">Theme: {role.theme}</p>
             <p className="text-white/80 text-lg md:text-xl mb-2 fade-in-up">You are:</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 fade-in-up role-pulse text-glow-green">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 fade-in-up role-pulse">
               {role.option || role.theme}
             </h1>
             <div className="bg-white/10 rounded-xl p-4 fade-in-up" style={{ animationDelay: '200ms' }}>
