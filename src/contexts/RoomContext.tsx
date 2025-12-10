@@ -30,6 +30,8 @@ export interface RoomContextType {
   subscribeToRoom: (roomCode: string) => Unsubscribe;
   restoreHostSession: () => Promise<string | null>;
   restorePlayerSession: () => Promise<string | null>;
+  startRound: (roomCode: string, totalRounds?: number) => Promise<boolean>;
+  revealRustam: (roomCode: string) => Promise<boolean>;
   leaveRoom: () => void;
 }
 
@@ -226,6 +228,106 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
     return null;
   }, []);
 
+  // Start a game round with role assignment
+  const startRound = useCallback(
+    async (roomCode: string, totalRounds: number = 4): Promise<boolean> => {
+      if (!auth.currentUser) {
+        setError('Not authenticated');
+        return false;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Get current room
+        const roomRef = ref(db, `rooms/${roomCode}`);
+        const roomSnapshot = await get(roomRef);
+
+        if (!roomSnapshot.exists()) {
+          setError('Room not found');
+          return false;
+        }
+
+        const roomData = roomSnapshot.val() as Omit<RoomData, 'code'>;
+
+        // Get all players
+        const playersRef = ref(db, `rooms/${roomCode}/players`);
+        const playersSnapshot = await get(playersRef);
+
+        if (!playersSnapshot.exists()) {
+          setError('No players in room');
+          return false;
+        }
+
+        const playersData = playersSnapshot.val() as Record<string, Omit<Player, 'uid'>>;
+        const playerUids = Object.keys(playersData);
+
+        if (playerUids.length < 2) {
+          setError('Need at least 2 players to start');
+          return false;
+        }
+
+        // Randomly select Rustam
+        const rustamUid = playerUids[Math.floor(Math.random() * playerUids.length)];
+
+        // Assign roles to all players
+        const roleUpdates: Record<string, unknown> = {};
+
+        playerUids.forEach((uid) => {
+          const isRustam = uid === rustamUid;
+          roleUpdates[`rooms/${roomCode}/roles/${uid}`] = {
+            isRustam,
+            theme: isRustam ? null : 'Kitchen Appliances', // Will be set by host later
+          };
+        });
+
+        // Update room status and Rustam ID
+        roleUpdates[`rooms/${roomCode}/status`] = 'active';
+        roleUpdates[`rooms/${roomCode}/rustamUid`] = rustamUid;
+        roleUpdates[`rooms/${roomCode}/currentRound`] = (roomData.currentRound || 0) + 1;
+
+        // Execute all updates
+        const updates = { ...roleUpdates };
+        await Promise.all(
+          Object.entries(updates).map(([path, value]) => set(ref(db, path), value))
+        );
+
+        return true;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  // Reveal the Rustam
+  const revealRustam = useCallback(async (roomCode: string): Promise<boolean> => {
+    if (!auth.currentUser) {
+      setError('Not authenticated');
+      return false;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const roomRef = ref(db, `rooms/${roomCode}`);
+      await set(roomRef, { ...room, status: 'revealed' }, { merge: true });
+      return true;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [room]);
+
   const leaveRoom = useCallback((): void => {
     setRoom(null);
     setPlayers([]);
@@ -244,6 +346,8 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
     subscribeToRoom,
     restoreHostSession,
     restorePlayerSession,
+    startRound,
+    revealRustam,
     leaveRoom,
   };
 

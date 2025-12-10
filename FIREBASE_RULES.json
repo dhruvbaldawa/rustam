@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomCode": {
+        ".read": true,
+        ".write": true,
+
+        "rustamUid": {
+          ".read": "data.parent().child('status').val() === 'revealed'"
+        },
+
+        "roles": {
+          "$uid": {
+            ".read": "$uid === auth.uid",
+            ".write": "data.parent().parent().child('hostUid').val() === auth.uid"
+          }
+        }
+      }
+    }
+  }
+}
