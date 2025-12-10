@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRoom } from '../../hooks/useRoom';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 export const Join = () => {
   const navigate = useNavigate();
@@ -68,15 +69,15 @@ export const Join = () => {
 
   if (isRestoring) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-800">
-        <p className="text-white text-xl">Checking session...</p>
+      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 safe-area-top safe-area-bottom">
+        <LoadingSpinner text="Checking session..." />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
-      <div className="w-full max-w-md">
+    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
+      <div className="w-full max-w-md pb-4">
         <h1 className="text-4xl font-bold text-white mb-2 text-center">The Rustam</h1>
         <p className="text-slate-300 text-center mb-8">Join Game</p>
 
@@ -124,10 +125,10 @@ export const Join = () => {
           <button
             type="submit"
             disabled={joining}
-            className={`w-full py-3 px-4 rounded-lg font-bold text-white transition ${
+            className={`w-full py-3 px-4 rounded-lg font-bold text-white transition-all active:scale-[0.98] focus-visible ${
               joining
                 ? 'bg-gray-600 cursor-not-allowed opacity-50'
-                : 'bg-green-500 hover:bg-green-600 cursor-pointer'
+                : 'bg-green-500 hover:bg-green-600 cursor-pointer btn-hover'
             }`}
           >
             {joining ? 'Joining...' : 'Join Game'}
@@ -137,7 +138,7 @@ export const Join = () => {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="w-full py-2 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition"
+            className="w-full py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
           >
             Back to Home
           </button>

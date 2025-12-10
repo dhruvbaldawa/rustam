@@ -14,7 +14,7 @@ export const GameOver = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
       <div className="w-full max-w-md text-center">
         <h1 className="text-5xl font-bold text-white mb-4">Game Over</h1>
         <p className="text-slate-300 text-lg mb-8">Thanks for playing!</p>

@@ -7,23 +7,23 @@ export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 gap-8">
-      <div className="text-center">
-        <h1 className="text-5xl font-bold text-white mb-4">The Rustam</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 gap-8 safe-area-top safe-area-bottom">
+      <div className="text-center fade-in-up">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">The Rustam</h1>
         <p className="text-xl text-slate-300 mb-12">Party Game</p>
       </div>
 
       <div className="flex flex-col gap-6 w-full max-w-xs px-4">
         <button
           onClick={() => navigate('/host')}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all active:scale-[0.98] focus-visible"
         >
           Host Game
         </button>
 
         <button
           onClick={() => navigate('/play')}
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition"
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all active:scale-[0.98] focus-visible"
         >
           Join Game
         </button>

@@ -32,14 +32,14 @@ export const Waiting = () => {
 
   if (!room) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-800">
+      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800">
         <p className="text-white text-xl">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
       <div className="w-full max-w-md text-center">
         <h1 className="text-4xl font-bold text-white mb-2">The Rustam</h1>
         <p className="text-slate-300 mb-8">Waiting for host to start...</p>
@@ -67,7 +67,7 @@ export const Waiting = () => {
         {/* Leave Button */}
         <button
           onClick={() => navigate('/')}
-          className="w-full py-2 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition"
+          className="w-full py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
         >
           Leave Game
         </button>

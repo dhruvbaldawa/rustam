@@ -64,7 +64,7 @@ export const RoleReveal = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-red-900">
+      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-red-900 safe-area-top safe-area-bottom">
         <div className="text-center">
           <p className="text-white text-2xl font-bold mb-4">Connection Error</p>
           <p className="text-white text-lg mb-4">{error}</p>
@@ -81,7 +81,7 @@ export const RoleReveal = () => {
 
   if (loading || !role) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-800">
+      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 safe-area-top safe-area-bottom">
         <p className="text-white text-xl">Getting your role...</p>
       </div>
     );
@@ -89,26 +89,26 @@ export const RoleReveal = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen p-4 transition-all duration-500"
+      className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 transition-all duration-500 safe-area-top safe-area-bottom"
       style={{
         backgroundColor: role.isRustam ? '#ef4444' : '#22c55e',
       }}
     >
-      <div className="w-full max-w-md text-center">
+      <div className="w-full max-w-md text-center role-reveal">
         {role.isRustam ? (
           <>
-            <p className="text-white/80 text-xl mb-4">🔴</p>
-            <h1 className="text-6xl font-bold text-white mb-4">YOU ARE THE</h1>
-            <h2 className="text-7xl font-bold text-white mb-8">RUSTAM</h2>
-            <p className="text-white text-xl mb-4">Figure out the theme.</p>
-            <p className="text-white text-xl">Blend in.</p>
+            <p className="text-white/80 text-4xl md:text-5xl mb-4">🔴</p>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 fade-in-up">YOU ARE THE</h1>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 fade-in-up role-pulse">RUSTAM</h2>
+            <p className="text-white text-lg md:text-xl mb-4">Figure out the theme.</p>
+            <p className="text-white text-lg md:text-xl">Blend in.</p>
           </>
         ) : (
           <>
-            <p className="text-white/80 text-xl mb-4">🟢</p>
-            <p className="text-white text-lg mb-4">Theme:</p>
-            <h1 className="text-5xl font-bold text-white mb-8">{role.theme}</h1>
-            <p className="text-white text-sm">Keep this secret!</p>
+            <p className="text-white/80 text-4xl md:text-5xl mb-4">🟢</p>
+            <p className="text-white text-lg md:text-xl mb-4 fade-in-up">Theme:</p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 fade-in-up role-pulse">{role.theme}</h1>
+            <p className="text-white text-sm md:text-base">Keep this secret!</p>
           </>
         )}
       </div>

@@ -21,6 +21,18 @@ export const Lobby = () => {
     initedRef.current = true;
 
     const initRoom = async () => {
+      // Check if we should skip session restoration
+      const skipRestore = sessionStorage.getItem('skip_session_restore');
+      if (skipRestore) {
+        sessionStorage.removeItem('skip_session_restore');
+        // Create new room immediately
+        const newRoomCode = await createRoom();
+        if (newRoomCode) {
+          unsubscribeRef.current = subscribeToRoom(newRoomCode);
+        }
+        return;
+      }
+
       // Try to restore session
       const existingRoom = await restoreHostSession();
       if (existingRoom) {
@@ -55,7 +67,7 @@ export const Lobby = () => {
 
   if (loading || !room) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-800">
+      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800">
         <p className="text-white text-xl">Creating room...</p>
       </div>
     );
@@ -64,10 +76,10 @@ export const Lobby = () => {
   const joinUrl = `${window.location.origin}/play?code=${room.code}`;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
       <div className="w-full max-w-md text-center">
         {/* Room Code */}
-        <h1 className="text-6xl font-bold text-white mb-2" style={{ fontSize: '64px' }}>
+        <h1 className="text-5xl md:text-6xl font-bold text-white mb-2" style={{ fontSize: 'clamp(40px, 8vw, 64px)' }}>
           {room.code}
         </h1>
         <p className="text-slate-400 mb-8">Room Code</p>
@@ -76,7 +88,7 @@ export const Lobby = () => {
         <div className="flex justify-center mb-6 bg-white p-4 rounded-lg">
           <QRCode
             value={joinUrl}
-            size={256}
+            size={Math.min(256, window.innerWidth * 0.6)}
             level="H"
             includeMargin={true}
           />
@@ -120,7 +132,7 @@ export const Lobby = () => {
             id="theme-selector"
             value={selectedTheme}
             onChange={(e) => setSelectedTheme(e.target.value)}
-            className="w-full py-3 px-4 rounded-lg bg-slate-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+            className="w-full py-3 px-4 rounded-lg bg-slate-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer btn-hover"
           >
             <option value={RANDOM_THEME}>{RANDOM_THEME} (Recommended)</option>
             {THEMES.map((theme) => (
@@ -142,7 +154,7 @@ export const Lobby = () => {
             }
           }}
           disabled={players.length < 2}
-          className={`w-full py-3 px-4 rounded-lg font-bold text-white transition cursor-pointer ${
+          className={`w-full py-3 px-4 rounded-lg font-bold text-white transition cursor-pointer btn-hover ${
             players.length >= 2
               ? 'bg-green-500 hover:bg-green-600'
               : 'bg-slate-600 cursor-not-allowed'
@@ -153,7 +165,7 @@ export const Lobby = () => {
 
         <button
           onClick={() => navigate('/')}
-          className="w-full mt-4 py-2 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition"
+          className="w-full mt-4 py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
         >
           Back to Home
         </button>

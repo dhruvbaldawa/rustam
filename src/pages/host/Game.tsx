@@ -38,6 +38,13 @@ export const Game = () => {
     }
   }, [room?.rustamUid, players]);
 
+  // Navigate to game over when game ends
+  useEffect(() => {
+    if (room?.status === 'ended') {
+      navigate('/host/gameover', { replace: true });
+    }
+  }, [room?.status, navigate]);
+
   const handleReveal = async () => {
     if (roomCode) {
       setOperationLoading(true);
@@ -95,7 +102,7 @@ export const Game = () => {
 
   if (loading || !room) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-800">
+      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800">
         <p className="text-white text-xl">Loading game...</p>
       </div>
     );
@@ -105,7 +112,7 @@ export const Game = () => {
   const displayError = error || operationError;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
       <div className="w-full max-w-md text-center">
         {displayError && (
           <div className="mb-4 p-4 bg-red-900/50 border border-red-500 rounded-lg">
@@ -126,7 +133,7 @@ export const Game = () => {
             <button
               onClick={handleReveal}
               disabled={operationLoading}
-              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 btn-hover transition-all active:scale-[0.98] focus-visible text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {operationLoading ? 'Revealing...' : 'Reveal Rustam'}
             </button>
@@ -141,7 +148,7 @@ export const Game = () => {
             <button
               onClick={handleNextRound}
               disabled={operationLoading}
-              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 btn-hover transition-all active:scale-[0.98] focus-visible text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {operationLoading ? 'Starting next round...' : 'Next Round'}
             </button>
@@ -149,7 +156,7 @@ export const Game = () => {
             <button
               onClick={handleEndGame}
               disabled={operationLoading}
-              className="w-full py-3 px-4 rounded-lg font-bold text-white bg-slate-600 hover:bg-slate-500 transition text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-4 rounded-lg font-bold text-white bg-slate-600 hover:bg-slate-500 transition-all active:scale-[0.98] focus-visible text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {operationLoading ? 'Ending game...' : 'End Game'}
             </button>
@@ -158,7 +165,7 @@ export const Game = () => {
 
         <button
           onClick={() => navigate('/host', { replace: true })}
-          className="w-full mt-4 py-2 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition"
+          className="w-full mt-4 py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
         >
           Back to Lobby
         </button>
