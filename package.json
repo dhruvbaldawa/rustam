@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "pnpm build && wrangler pages deploy dist",
+    "deploy:help": "echo 'First time setup: wrangler pages project create rustam && pnpm deploy'"
   },
   "dependencies": {
     "firebase": "^12.6.0",
