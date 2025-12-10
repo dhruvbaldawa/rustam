@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useRoom } from '../../hooks/useRoom';
+import { Unsubscribe } from 'firebase/database';
 
 export const Lobby = () => {
   const navigate = useNavigate();
   const { room, players, loading, createRoom, subscribeToRoom, restoreHostSession } = useRoom();
-  const [unsubscribe, setUnsubscribe] = useState(null);
+  const [unsubscribe, setUnsubscribe] = useState<Unsubscribe | null>(null);
 
   useEffect(() => {
     const initRoom = async () => {
