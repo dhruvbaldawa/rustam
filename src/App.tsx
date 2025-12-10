@@ -7,6 +7,7 @@ import { RoomProvider } from './contexts/RoomContext';
 import { Home } from './pages/Home';
 import { Lobby } from './pages/host/Lobby';
 import { Join } from './pages/player/Join';
+import { Waiting } from './pages/player/Waiting';
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/host" element={<Lobby />} />
           <Route path="/play" element={<Join />} />
+          <Route path="/play/waiting" element={<Waiting />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
