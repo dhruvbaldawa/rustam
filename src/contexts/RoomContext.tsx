@@ -356,7 +356,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
     } finally {
       setLoading(false);
     }
-  }, [room]);
+  }, []);
 
   // Start next round (clear old roles, transition back to lobby)
   const nextRound = useCallback(async (roomCode: string): Promise<boolean> => {
