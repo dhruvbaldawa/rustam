@@ -1,18 +1,20 @@
 // ABOUTME: Host lobby screen showing room code and waiting for players
 // ABOUTME: Displays QR code for easy joining and player list
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useRoom } from '../../hooks/useRoom';
 import { Unsubscribe, ref, get } from 'firebase/database';
 import { db } from '../../lib/firebase';
+import { THEMES, RANDOM_THEME } from '../../lib/themes';
 
 export const Lobby = () => {
   const navigate = useNavigate();
-  const { room, players, loading, createRoom, subscribeToRoom, restoreHostSession, startRound } = useRoom();
+  const { room, players, loading, error, createRoom, subscribeToRoom, restoreHostSession, startRound } = useRoom();
   const unsubscribeRef = useRef<Unsubscribe | null>(null);
   const initedRef = useRef(false);
+  const [selectedTheme, setSelectedTheme] = useState<string>(RANDOM_THEME);
 
   useEffect(() => {
     if (initedRef.current) return;
@@ -102,11 +104,38 @@ export const Lobby = () => {
           </div>
         )}
 
+        {/* Error Display */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-900 border border-red-700 rounded-lg">
+            <p className="text-white text-sm font-medium">{error}</p>
+          </div>
+        )}
+
+        {/* Theme Selection */}
+        <div className="mb-4">
+          <label htmlFor="theme-selector" className="block text-white font-semibold mb-2">
+            Choose Theme:
+          </label>
+          <select
+            id="theme-selector"
+            value={selectedTheme}
+            onChange={(e) => setSelectedTheme(e.target.value)}
+            className="w-full py-3 px-4 rounded-lg bg-slate-700 text-white font-medium focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+          >
+            <option value={RANDOM_THEME}>{RANDOM_THEME} (Recommended)</option>
+            {THEMES.map((theme) => (
+              <option key={theme} value={theme}>
+                {theme}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* Start Game Button */}
         <button
           onClick={async () => {
             if (players.length >= 2) {
-              const success = await startRound(room.code);
+              const success = await startRound(room.code, selectedTheme);
               if (success) {
                 navigate('/host/game', { state: { roomCode: room.code } });
               }

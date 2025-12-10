@@ -4,6 +4,7 @@
 import { createContext, useState, useCallback, ReactNode } from 'react';
 import { ref, set, get, onValue, Unsubscribe, update } from 'firebase/database';
 import { db, auth } from '../lib/firebase';
+import { getThemeForRound, getRandomTheme, RANDOM_THEME, THEMES } from '../lib/themes';
 
 export interface Player {
   uid: string;
@@ -31,7 +32,7 @@ export interface RoomContextType {
   subscribeToRoom: (roomCode: string) => Unsubscribe;
   restoreHostSession: () => Promise<string | null>;
   restorePlayerSession: () => Promise<string | null>;
-  startRound: (roomCode: string) => Promise<boolean>;
+  startRound: (roomCode: string, selectedTheme?: string) => Promise<boolean>;
   revealRustam: (roomCode: string) => Promise<boolean>;
   nextRound: (roomCode: string) => Promise<boolean>;
   endGame: (roomCode: string) => Promise<boolean>;
@@ -44,17 +45,6 @@ interface RoomProviderProps {
   children: ReactNode;
 }
 
-const THEMES = [
-  'Kitchen Appliances',
-  'Vehicles',
-  'Furniture',
-  'Animals',
-  'Fruits',
-];
-
-const getThemeForRound = (roundNumber: number): string => {
-  return THEMES[(roundNumber - 1) % THEMES.length];
-};
 
 export const RoomProvider = ({ children }: RoomProviderProps) => {
   const [room, setRoom] = useState<RoomData | null>(null);
@@ -258,7 +248,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
   // Start a game round with role assignment
   const startRound = useCallback(
-    async (roomCode: string): Promise<boolean> => {
+    async (roomCode: string, selectedTheme?: string): Promise<boolean> => {
       if (!auth.currentUser) {
         setError('Not authenticated');
         return false;
@@ -279,6 +269,12 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
         const roomData = roomSnapshot.val() as Omit<RoomData, 'code'>;
 
+        // Verify caller is the room host
+        if (roomData.hostUid !== auth.currentUser.uid) {
+          setError('Only the host can start rounds');
+          return false;
+        }
+
         // Get all players
         const playersRef = ref(db, `rooms/${roomCode}/players`);
         const playersSnapshot = await get(playersRef);
@@ -298,7 +294,20 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
         // Increment round number and get theme
         const nextRoundNumber = (roomData.currentRound || 0) + 1;
-        const currentTheme = getThemeForRound(nextRoundNumber);
+
+        // Determine theme: use selectedTheme if provided, otherwise auto-select
+        let currentTheme: string;
+        if (selectedTheme === RANDOM_THEME || !selectedTheme) {
+          currentTheme = getRandomTheme();
+        } else {
+          // Validate selectedTheme is in THEMES array
+          const validThemes = [...THEMES];
+          if (!validThemes.includes(selectedTheme as any)) {
+            setError(`Invalid theme: ${selectedTheme}`);
+            return false;
+          }
+          currentTheme = selectedTheme;
+        }
 
         // Randomly select Rustam
         const rustamUid = playerUids[Math.floor(Math.random() * playerUids.length)];
