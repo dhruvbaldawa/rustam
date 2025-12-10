@@ -2,7 +2,7 @@
 // ABOUTME: Handles room creation, player management, and game state with full TypeScript types
 
 import { createContext, useState, useCallback, ReactNode } from 'react';
-import { ref, set, get, onValue, Unsubscribe } from 'firebase/database';
+import { ref, set, get, onValue, Unsubscribe, update } from 'firebase/database';
 import { db, auth } from '../lib/firebase';
 
 export interface Player {
@@ -63,7 +63,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
   // Generate a unique 4-digit room code
   const generateRoomCode = useCallback(async (): Promise<string> => {
-    let code: string;
+    let code = '';
     let exists = true;
 
     while (exists) {
@@ -180,27 +180,41 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
       if (!roomCode) return () => {};
 
       const roomRef = ref(db, `rooms/${roomCode}`);
-      const unsubscribeRoom = onValue(roomRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val() as Omit<RoomData, 'code'>;
-          setRoom({ code: roomCode, ...data });
+      const unsubscribeRoom = onValue(
+        roomRef,
+        (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val() as Omit<RoomData, 'code'>;
+            setRoom({ code: roomCode, ...data });
+          }
+        },
+        (error) => {
+          setError(`Failed to load room: ${error.message}`);
+          console.error('Room listener error:', error);
         }
-      });
+      );
 
       // Listen to players
       const playersRef = ref(db, `rooms/${roomCode}/players`);
-      const unsubscribePlayers = onValue(playersRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const playersData = snapshot.val() as Record<string, Omit<Player, 'uid'>>;
-          const playersList: Player[] = Object.entries(playersData).map(([uid, data]) => ({
-            uid,
-            ...data,
-          }));
-          setPlayers(playersList);
-        } else {
-          setPlayers([]);
+      const unsubscribePlayers = onValue(
+        playersRef,
+        (snapshot) => {
+          if (snapshot.exists()) {
+            const playersData = snapshot.val() as Record<string, Omit<Player, 'uid'>>;
+            const playersList: Player[] = Object.entries(playersData).map(([uid, data]) => ({
+              uid,
+              ...data,
+            }));
+            setPlayers(playersList);
+          } else {
+            setPlayers([]);
+          }
+        },
+        (error) => {
+          setError(`Failed to load players: ${error.message}`);
+          console.error('Players listener error:', error);
         }
-      });
+      );
 
       return () => {
         unsubscribeRoom();
@@ -290,27 +304,24 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
         const rustamUid = playerUids[Math.floor(Math.random() * playerUids.length)];
 
         // Assign roles to all players
-        const roleUpdates: Record<string, unknown> = {};
+        const roomUpdates: Record<string, unknown> = {};
 
         playerUids.forEach((uid) => {
           const isRustam = uid === rustamUid;
-          roleUpdates[`rooms/${roomCode}/roles/${uid}`] = {
+          roomUpdates[`roles/${uid}`] = {
             isRustam,
             theme: isRustam ? null : currentTheme,
           };
         });
 
         // Update room status and Rustam ID
-        roleUpdates[`rooms/${roomCode}/status`] = 'active';
-        roleUpdates[`rooms/${roomCode}/rustamUid`] = rustamUid;
-        roleUpdates[`rooms/${roomCode}/currentRound`] = nextRoundNumber;
-        roleUpdates[`rooms/${roomCode}/currentTheme`] = currentTheme;
+        roomUpdates['status'] = 'active';
+        roomUpdates['rustamUid'] = rustamUid;
+        roomUpdates['currentRound'] = nextRoundNumber;
+        roomUpdates['currentTheme'] = currentTheme;
 
-        // Execute all updates
-        const updates = { ...roleUpdates };
-        await Promise.all(
-          Object.entries(updates).map(([path, value]) => set(ref(db, path), value))
-        );
+        // Execute all updates atomically
+        await update(roomRef, roomUpdates);
 
         return true;
       } catch (err) {
@@ -336,7 +347,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
     try {
       const roomRef = ref(db, `rooms/${roomCode}`);
-      await set(roomRef, { ...room, status: 'revealed' }, { merge: true });
+      await update(roomRef, { status: 'revealed' });
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
@@ -420,7 +431,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
     try {
       const roomRef = ref(db, `rooms/${roomCode}`);
-      await set(roomRef, { status: 'ended' }, { merge: true });
+      await update(roomRef, { status: 'ended' });
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';

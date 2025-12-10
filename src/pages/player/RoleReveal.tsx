@@ -17,6 +17,7 @@ export const RoleReveal = () => {
   const { room, subscribeToRoom } = useRoom();
   const [role, setRole] = useState<PlayerRole | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!room?.code || !auth.currentUser) {
@@ -29,12 +30,21 @@ export const RoleReveal = () => {
 
     // Listen to player's role
     const roleRef = ref(db, `rooms/${room.code}/roles/${auth.currentUser.uid}`);
-    const unsubRole = onValue(roleRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setRole(snapshot.val());
+    const unsubRole = onValue(
+      roleRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setRole(snapshot.val());
+          setLoading(false);
+          setError(null);
+        }
+      },
+      (err) => {
+        setError(`Failed to load role: ${err.message}`);
         setLoading(false);
+        console.error('Role listener error:', err);
       }
-    });
+    );
 
     // If room status changes to revealed, navigate to reveal screen
     if (room.status === 'revealed' && role) {
@@ -51,6 +61,23 @@ export const RoleReveal = () => {
       unsubRole();
     };
   }, [room?.code, room?.status, subscribeToRoom, navigate, role]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-red-900">
+        <div className="text-center">
+          <p className="text-white text-2xl font-bold mb-4">Connection Error</p>
+          <p className="text-white text-lg mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-white text-red-900 font-bold rounded-lg hover:bg-gray-100"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading || !role) {
     return (

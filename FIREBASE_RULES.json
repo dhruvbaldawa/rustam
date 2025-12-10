@@ -2,17 +2,71 @@
   "rules": {
     "rooms": {
       "$roomCode": {
-        ".read": true,
-        ".write": true,
+        ".read": "auth.uid !== null",
+        ".write": "data.child('hostUid').val() === auth.uid || !data.exists()",
+        ".validate": "newData.hasChildren(['hostUid', 'status', 'currentRound', 'totalRounds']) || !data.exists()",
+
+        "hostUid": {
+          ".write": "!data.exists()"
+        },
+
+        "status": {
+          ".write": "data.parent().child('hostUid').val() === auth.uid",
+          ".validate": "newData.val() === 'lobby' || newData.val() === 'active' || newData.val() === 'revealed' || newData.val() === 'ended'"
+        },
+
+        "currentRound": {
+          ".write": "data.parent().child('hostUid').val() === auth.uid",
+          ".validate": "newData.isNumber() && newData.val() >= 1"
+        },
+
+        "totalRounds": {
+          ".write": "data.parent().child('hostUid').val() === auth.uid",
+          ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 10"
+        },
 
         "rustamUid": {
-          ".read": "data.parent().child('status').val() === 'revealed'"
+          ".read": "data.parent().child('status').val() === 'revealed'",
+          ".write": "data.parent().child('hostUid').val() === auth.uid"
+        },
+
+        "currentTheme": {
+          ".write": "data.parent().child('hostUid').val() === auth.uid"
+        },
+
+        "createdAt": {
+          ".write": "!data.exists()"
+        },
+
+        "players": {
+          "$uid": {
+            ".read": "auth.uid !== null",
+            ".write": "$uid === auth.uid && data.parent().parent().child('status').val() === 'lobby' || data.parent().parent().child('hostUid').val() === auth.uid",
+            ".validate": "newData.hasChildren(['name', 'joinedAt'])",
+
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 10"
+            },
+
+            "joinedAt": {
+              ".validate": "newData.isNumber()"
+            }
+          }
         },
 
         "roles": {
           "$uid": {
-            ".read": "$uid === auth.uid",
-            ".write": "data.parent().parent().child('hostUid').val() === auth.uid"
+            ".read": "$uid === auth.uid || data.parent().parent().child('status').val() === 'revealed'",
+            ".write": "data.parent().parent().child('hostUid').val() === auth.uid",
+            ".validate": "newData.hasChildren(['isRustam'])",
+
+            "isRustam": {
+              ".validate": "newData.isBoolean()"
+            },
+
+            "theme": {
+              ".validate": "newData.isString() || newData.val() === null"
+            }
           }
         }
       }

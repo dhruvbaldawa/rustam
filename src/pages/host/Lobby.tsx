@@ -48,7 +48,8 @@ export const Lobby = () => {
         unsubscribe();
       }
     };
-  }, [createRoom, restoreHostSession, subscribeToRoom, navigate, unsubscribe, rounds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createRoom, restoreHostSession, subscribeToRoom, navigate]);
 
   if (loading || !room) {
     return (
@@ -119,8 +120,10 @@ export const Lobby = () => {
         <button
           onClick={async () => {
             if (players.length >= 2) {
-              await startRound(room.code);
-              navigate('/host/game', { state: { roomCode: room.code } });
+              const success = await startRound(room.code);
+              if (success) {
+                navigate('/host/game', { state: { roomCode: room.code } });
+              }
             }
           }}
           disabled={players.length < 2}

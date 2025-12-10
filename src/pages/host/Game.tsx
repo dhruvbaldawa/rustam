@@ -12,9 +12,11 @@ interface LocationState {
 export const Game = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { room, players, revealRustam, nextRound, endGame, subscribeToRoom } = useRoom();
+  const { room, players, revealRustam, nextRound, endGame, subscribeToRoom, error } = useRoom();
   const [rustamName, setRustamName] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [operationLoading, setOperationLoading] = useState(false);
+  const [operationError, setOperationError] = useState<string | null>(null);
 
   const roomCode = (location.state as LocationState)?.roomCode || room?.code;
 
@@ -38,23 +40,56 @@ export const Game = () => {
 
   const handleReveal = async () => {
     if (roomCode) {
-      await revealRustam(roomCode);
+      setOperationLoading(true);
+      setOperationError(null);
+      try {
+        const success = await revealRustam(roomCode);
+        if (!success) {
+          setOperationError('Failed to reveal Rustam');
+        }
+      } catch (err) {
+        setOperationError(err instanceof Error ? err.message : 'Failed to reveal Rustam');
+      } finally {
+        setOperationLoading(false);
+      }
     }
   };
 
   const handleNextRound = async () => {
     if (roomCode) {
-      const success = await nextRound(roomCode);
-      if (success) {
-        navigate('/host', { replace: true });
+      setOperationLoading(true);
+      setOperationError(null);
+      try {
+        const success = await nextRound(roomCode);
+        if (success) {
+          navigate('/host', { replace: true });
+        } else {
+          setOperationError('Failed to start next round');
+        }
+      } catch (err) {
+        setOperationError(err instanceof Error ? err.message : 'Failed to start next round');
+      } finally {
+        setOperationLoading(false);
       }
     }
   };
 
   const handleEndGame = async () => {
     if (roomCode) {
-      await endGame(roomCode);
-      navigate('/', { replace: true });
+      setOperationLoading(true);
+      setOperationError(null);
+      try {
+        const success = await endGame(roomCode);
+        if (success) {
+          navigate('/', { replace: true });
+        } else {
+          setOperationError('Failed to end game');
+        }
+      } catch (err) {
+        setOperationError(err instanceof Error ? err.message : 'Failed to end game');
+      } finally {
+        setOperationLoading(false);
+      }
     }
   };
 
@@ -67,10 +102,17 @@ export const Game = () => {
   }
 
   const isRevealed = room.status === 'revealed';
+  const displayError = error || operationError;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
       <div className="w-full max-w-md text-center">
+        {displayError && (
+          <div className="mb-4 p-4 bg-red-900/50 border border-red-500 rounded-lg">
+            <p className="text-red-300 text-sm font-semibold">{displayError}</p>
+          </div>
+        )}
+
         <p className="text-slate-400 mb-4">Round {room.currentRound} of {room.totalRounds}</p>
         <p className="text-slate-300 text-lg mb-8">Theme: {room.currentTheme || 'Loading...'}</p>
 
@@ -83,9 +125,10 @@ export const Game = () => {
 
             <button
               onClick={handleReveal}
-              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 transition text-lg mb-4"
+              disabled={operationLoading}
+              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Reveal Rustam
+              {operationLoading ? 'Revealing...' : 'Reveal Rustam'}
             </button>
           </>
         ) : (
@@ -98,16 +141,18 @@ export const Game = () => {
             {room.currentRound < room.totalRounds ? (
               <button
                 onClick={handleNextRound}
-                className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4"
+                disabled={operationLoading}
+                className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next Round
+                {operationLoading ? 'Starting next round...' : 'Next Round'}
               </button>
             ) : (
               <button
                 onClick={handleEndGame}
-                className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4"
+                disabled={operationLoading}
+                className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                End Game
+                {operationLoading ? 'Ending game...' : 'End Game'}
               </button>
             )}
           </>
