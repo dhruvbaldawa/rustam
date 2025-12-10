@@ -10,6 +10,8 @@ import { Game } from './pages/host/Game';
 import { Join } from './pages/player/Join';
 import { Waiting } from './pages/player/Waiting';
 import { RoleReveal } from './pages/player/RoleReveal';
+import { RustamRevealed } from './pages/player/RustamRevealed';
+import { GameOver } from './pages/player/GameOver';
 import './App.css';
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
           <Route path="/play" element={<Join />} />
           <Route path="/play/waiting" element={<Waiting />} />
           <Route path="/play/role" element={<RoleReveal />} />
+          <Route path="/play/revealed" element={<RustamRevealed />} />
+          <Route path="/play/gameover" element={<GameOver />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>

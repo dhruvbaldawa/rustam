@@ -30,8 +30,10 @@ export interface RoomContextType {
   subscribeToRoom: (roomCode: string) => Unsubscribe;
   restoreHostSession: () => Promise<string | null>;
   restorePlayerSession: () => Promise<string | null>;
-  startRound: (roomCode: string, totalRounds?: number) => Promise<boolean>;
+  startRound: (roomCode: string) => Promise<boolean>;
   revealRustam: (roomCode: string) => Promise<boolean>;
+  nextRound: (roomCode: string) => Promise<boolean>;
+  endGame: (roomCode: string) => Promise<boolean>;
   leaveRoom: () => void;
 }
 
@@ -40,6 +42,18 @@ export const RoomContext = createContext<RoomContextType | undefined>(undefined)
 interface RoomProviderProps {
   children: ReactNode;
 }
+
+const THEMES = [
+  'Kitchen Appliances',
+  'Vehicles',
+  'Furniture',
+  'Animals',
+  'Fruits',
+];
+
+const getThemeForRound = (roundNumber: number): string => {
+  return THEMES[(roundNumber - 1) % THEMES.length];
+};
 
 export const RoomProvider = ({ children }: RoomProviderProps) => {
   const [room, setRoom] = useState<RoomData | null>(null);
@@ -230,7 +244,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
   // Start a game round with role assignment
   const startRound = useCallback(
-    async (roomCode: string, totalRounds: number = 4): Promise<boolean> => {
+    async (roomCode: string): Promise<boolean> => {
       if (!auth.currentUser) {
         setError('Not authenticated');
         return false;
@@ -268,6 +282,10 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
           return false;
         }
 
+        // Increment round number and get theme
+        const nextRoundNumber = (roomData.currentRound || 0) + 1;
+        const currentTheme = getThemeForRound(nextRoundNumber);
+
         // Randomly select Rustam
         const rustamUid = playerUids[Math.floor(Math.random() * playerUids.length)];
 
@@ -278,14 +296,15 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
           const isRustam = uid === rustamUid;
           roleUpdates[`rooms/${roomCode}/roles/${uid}`] = {
             isRustam,
-            theme: isRustam ? null : 'Kitchen Appliances', // Will be set by host later
+            theme: isRustam ? null : currentTheme,
           };
         });
 
         // Update room status and Rustam ID
         roleUpdates[`rooms/${roomCode}/status`] = 'active';
         roleUpdates[`rooms/${roomCode}/rustamUid`] = rustamUid;
-        roleUpdates[`rooms/${roomCode}/currentRound`] = (roomData.currentRound || 0) + 1;
+        roleUpdates[`rooms/${roomCode}/currentRound`] = nextRoundNumber;
+        roleUpdates[`rooms/${roomCode}/currentTheme`] = currentTheme;
 
         // Execute all updates
         const updates = { ...roleUpdates };
@@ -328,6 +347,90 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
     }
   }, [room]);
 
+  // Start next round (clear old roles, transition back to lobby)
+  const nextRound = useCallback(async (roomCode: string): Promise<boolean> => {
+    if (!auth.currentUser) {
+      setError('Not authenticated');
+      return false;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const roomRef = ref(db, `rooms/${roomCode}`);
+      const roomSnapshot = await get(roomRef);
+
+      if (!roomSnapshot.exists()) {
+        setError('Room not found');
+        return false;
+      }
+
+      const roomData = roomSnapshot.val() as Omit<RoomData, 'code'>;
+
+      // Check if we've reached the final round
+      if (roomData.currentRound >= roomData.totalRounds) {
+        setError('All rounds completed');
+        return false;
+      }
+
+      // Clear old roles and reset to lobby
+      const updates: Record<string, unknown> = {};
+      updates[`rooms/${roomCode}/status`] = 'lobby';
+      updates[`rooms/${roomCode}/rustamUid`] = null;
+
+      // Delete old roles
+      const rolesRef = ref(db, `rooms/${roomCode}/roles`);
+      const rolesSnapshot = await get(rolesRef);
+      if (rolesSnapshot.exists()) {
+        const roles = rolesSnapshot.val() as Record<string, unknown>;
+        Object.keys(roles).forEach((uid) => {
+          updates[`rooms/${roomCode}/roles/${uid}`] = null;
+        });
+      }
+
+      await Promise.all(
+        Object.entries(updates).map(([path, value]) => {
+          if (value === null) {
+            return set(ref(db, path), null);
+          }
+          return set(ref(db, path), value);
+        })
+      );
+
+      return true;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // End the game
+  const endGame = useCallback(async (roomCode: string): Promise<boolean> => {
+    if (!auth.currentUser) {
+      setError('Not authenticated');
+      return false;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const roomRef = ref(db, `rooms/${roomCode}`);
+      await set(roomRef, { status: 'ended' }, { merge: true });
+      return true;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const leaveRoom = useCallback((): void => {
     setRoom(null);
     setPlayers([]);
@@ -348,6 +451,8 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
     restorePlayerSession,
     startRound,
     revealRustam,
+    nextRound,
+    endGame,
     leaveRoom,
   };
 

@@ -24,7 +24,7 @@ export const RoleReveal = () => {
       return;
     }
 
-    // Subscribe to room updates
+    // Subscribe to room updates to detect when reveal happens
     const unsub = subscribeToRoom(room.code);
 
     // Listen to player's role
@@ -36,11 +36,21 @@ export const RoleReveal = () => {
       }
     });
 
+    // If room status changes to revealed, navigate to reveal screen
+    if (room.status === 'revealed' && role) {
+      navigate('/play/revealed', { replace: true });
+    }
+
+    // If game ends, go to game over
+    if (room.status === 'ended') {
+      navigate('/play/gameover', { replace: true });
+    }
+
     return () => {
       unsub();
       unsubRole();
     };
-  }, [room?.code, subscribeToRoom, navigate]);
+  }, [room?.code, room?.status, subscribeToRoom, navigate, role]);
 
   if (loading || !role) {
     return (

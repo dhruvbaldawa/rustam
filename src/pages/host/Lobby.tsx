@@ -5,12 +5,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useRoom } from '../../hooks/useRoom';
-import { Unsubscribe } from 'firebase/database';
+import { Unsubscribe, ref, get } from 'firebase/database';
+import { db } from '../../lib/firebase';
 
 export const Lobby = () => {
   const navigate = useNavigate();
-  const { room, players, loading, createRoom, subscribeToRoom, restoreHostSession } = useRoom();
+  const { room, players, loading, createRoom, subscribeToRoom, restoreHostSession, startRound } = useRoom();
   const [unsubscribe, setUnsubscribe] = useState<Unsubscribe | null>(null);
+  const [rounds, setRounds] = useState(4);
 
   useEffect(() => {
     const initRoom = async () => {
@@ -19,9 +21,19 @@ export const Lobby = () => {
       if (existingRoom) {
         const unsub = subscribeToRoom(existingRoom);
         setUnsubscribe(() => unsub);
+        // If room is not in lobby state, navigate away
+        const roomRef = ref(db, `rooms/${existingRoom}`);
+        const snapshot = await get(roomRef);
+        if (snapshot.exists()) {
+          const roomData = snapshot.val();
+          setRounds(roomData.totalRounds || 4);
+          if (roomData.status !== 'lobby') {
+            navigate('/host/game', { state: { roomCode: existingRoom }, replace: true });
+          }
+        }
       } else {
-        // Create new room
-        const newRoomCode = await createRoom();
+        // Create new room with default rounds
+        const newRoomCode = await createRoom(rounds);
         if (newRoomCode) {
           const unsub = subscribeToRoom(newRoomCode);
           setUnsubscribe(() => unsub);
@@ -36,7 +48,7 @@ export const Lobby = () => {
         unsubscribe();
       }
     };
-  }, [createRoom, restoreHostSession, subscribeToRoom, unsubscribe]);
+  }, [createRoom, restoreHostSession, subscribeToRoom, navigate, unsubscribe, rounds]);
 
   if (loading || !room) {
     return (
@@ -89,12 +101,36 @@ export const Lobby = () => {
           </div>
         )}
 
+        {/* Round Configuration */}
+        <div className="mb-8 p-4 bg-slate-700 rounded-lg">
+          <label className="text-white text-sm mb-2 block">Number of Rounds:</label>
+          <select
+            value={rounds}
+            onChange={(e) => setRounds(parseInt(e.target.value))}
+            className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:border-green-500 focus:outline-none"
+          >
+            <option value={3}>3 Rounds</option>
+            <option value={4}>4 Rounds</option>
+            <option value={5}>5 Rounds</option>
+          </select>
+        </div>
+
         {/* Start Game Button */}
         <button
-          onClick={() => navigate('/host/game', { state: { roomCode: room.code } })}
-          className="w-full py-3 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition cursor-pointer"
+          onClick={async () => {
+            if (players.length >= 2) {
+              await startRound(room.code);
+              navigate('/host/game', { state: { roomCode: room.code } });
+            }
+          }}
+          disabled={players.length < 2}
+          className={`w-full py-3 px-4 rounded-lg font-bold text-white transition cursor-pointer ${
+            players.length >= 2
+              ? 'bg-green-500 hover:bg-green-600'
+              : 'bg-slate-600 cursor-not-allowed'
+          }`}
         >
-          Start Game
+          {players.length >= 2 ? 'Start Game' : 'Need 2+ Players'}
         </button>
 
         <button

@@ -12,12 +12,23 @@ export const Waiting = () => {
   useEffect(() => {
     if (room?.code) {
       const unsubscribe = subscribeToRoom(room.code);
+
+      // If game has started (status changed to active), navigate to role reveal
+      if (room.status === 'active') {
+        navigate('/play/role', { replace: true });
+      }
+
+      // If game ended before starting, go to game over
+      if (room.status === 'ended') {
+        navigate('/play/gameover', { replace: true });
+      }
+
       return unsubscribe;
     } else {
       // No room in context, go back to join
       navigate('/play', { replace: true });
     }
-  }, [room?.code, subscribeToRoom, navigate]);
+  }, [room?.code, room?.status, subscribeToRoom, navigate]);
 
   if (!room) {
     return (
