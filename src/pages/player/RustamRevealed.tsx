@@ -17,8 +17,13 @@ export const RustamRevealed = () => {
 
     const unsub = subscribeToRoom(room.code);
 
-    // If status changes to lobby, we're starting next round
-    if (room.status === 'lobby' && room.rustamUid) {
+    // If status changes to lobby, go to waiting for next round
+    if (room.status === 'lobby') {
+      navigate('/play/waiting', { replace: true });
+    }
+
+    // If status is active, new round has started - go to role reveal
+    if (room.status === 'active') {
       navigate('/play/role', { replace: true });
     }
 
@@ -28,7 +33,7 @@ export const RustamRevealed = () => {
     }
 
     return unsub;
-  }, [room?.code, room?.status, room?.rustamUid, subscribeToRoom, navigate]);
+  }, [room?.code, room?.status, subscribeToRoom, navigate]);
 
   if (!room) {
     return (

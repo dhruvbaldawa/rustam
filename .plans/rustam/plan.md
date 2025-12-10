@@ -68,10 +68,12 @@ Manual deploy via Wrangler CLI to Cloudflare Pages. Instructions provided in tas
 
 | Risk | Severity | Status | Mitigation |
 |------|----------|--------|------------|
-| Real-time sync latency >500ms | Critical | Unproven | Test with RTDB; measure with 4+ browser tabs |
-| Security rules can't hide roles per-player | Critical | Unproven | Prototype in Task 1.4 before building UI |
-| Player reconnection edge cases | Medium | Known | Store room/player in localStorage; handle gracefully |
-| Room code collision | Low | Known | Simple retry logic |
+| Real-time sync latency >500ms | Critical | ✅ PROVEN | Tested with 4+ browser tabs, <500ms sync |
+| Security rules can't hide roles per-player | Critical | ✅ PROVEN | Rules enforced, access control working |
+| Player reconnection edge cases | Medium | ✅ RESOLVED | localStorage persistence + session restoration |
+| Room code collision | Low | ✅ RESOLVED | Retry loop with existence check |
+| PWA install experience | Low | Unproven | Add manifest, test on iOS/Android |
+| Mobile viewport issues | Low | Known | Add viewport meta, safe area handling |
 
 ## Milestones
 
@@ -92,20 +94,33 @@ Manual deploy via Wrangler CLI to Cloudflare Pages. Instructions provided in tas
 - Minimum: 2+ players join, see roles simultaneously, host reveals Rustam, can play multiple rounds
 - Complete: Reconnection works, security rules proven, deployed to Cloudflare
 
-### Milestone 2: Game Polish & UX (Future)
-Theme selection, question sheets, PWA manifest, visual polish per PRD specs.
+### Milestone 2: Game Polish & UX
+**Goal**: Transform MVP into polished, mobile-first PWA with improved UX and installable experience.
+
+**Timeline**: 4-8 hours
+
+**Tasks** (in pending/):
+1. Theme selection UI - Host chooses from predefined themes or random
+2. PWA manifest & icons - Installable app with branding
+3. Mobile-first polish - Viewport, touch targets, safe areas
+4. Visual polish - Animations, transitions, typography
+5. Sound & haptics - Audio cues for key moments (stretch goal)
+
+**Success Criteria**:
+- Minimum: Theme selection works, PWA installable on iOS/Android, mobile-friendly
+- Complete: Smooth animations, sound effects, feels like native app
 
 ## Deferred Items
 
 | Item | Rationale | Target |
 |------|-----------|--------|
-| Theme selection UI | Not needed for core loop | M2 |
-| Host question sheet | Enhancement | M2 |
-| PWA manifest | Polish | M2 |
-| Mobile viewport enforcement | Polish | M2 |
-| Room TTL/cleanup | Nice-to-have | Post-MVP |
+| Host question sheet | Enhancement, not core UX | M3 |
+| Room TTL/cleanup | Infrastructure, not user-facing | M3 |
+| RNG improvements (crypto API) | Security hardening | M3 |
+| Rate limiting | Abuse prevention | M3 |
+| Comprehensive integration tests | Quality, not user-facing | M3 |
 
 ## Progress
 
-- [ ] Milestone 1: Core Real-Time Infrastructure
-- [ ] Milestone 2: Game Polish & UX
+- [x] Milestone 1: Core Real-Time Infrastructure ✅ COMPLETE (7/7 tasks, 38 tests passing)
+- [ ] Milestone 2: Game Polish & UX (5 tasks planned)

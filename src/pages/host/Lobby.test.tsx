@@ -12,7 +12,6 @@ vi.mock('../../hooks/useRoom', () => ({
       hostUid: 'host-123',
       status: 'lobby',
       currentRound: 0,
-      totalRounds: 4,
       createdAt: Date.now(),
     },
     players: [
@@ -71,17 +70,6 @@ describe('Host Lobby', () => {
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
-  });
-
-  it('should have round selector with 3-5 options', () => {
-    render(
-      <BrowserRouter>
-        <Lobby />
-      </BrowserRouter>
-    );
-
-    const select = screen.getByDisplayValue('4 Rounds');
-    expect(select).toBeInTheDocument();
   });
 
   it('should enable Start Game button with 2+ players', () => {

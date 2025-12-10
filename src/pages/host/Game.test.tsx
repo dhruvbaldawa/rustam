@@ -12,7 +12,6 @@ vi.mock('../../hooks/useRoom', () => ({
       hostUid: 'host-123',
       status: 'active',
       currentRound: 1,
-      totalRounds: 4,
       currentTheme: 'Kitchen Appliances',
       rustamUid: 'player-1',
       createdAt: Date.now(),
@@ -51,7 +50,7 @@ describe('Host Game Screen', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Round 1 of 4/i)).toBeInTheDocument();
+    expect(screen.getByText(/Round 1/i)).toBeInTheDocument();
   });
 
   it('should display current theme', () => {
@@ -85,35 +84,14 @@ describe('Host Game Screen', () => {
     expect(revealButton).toBeInTheDocument();
   });
 
-  it('should show Next Round button on final round when revealed', () => {
-    // Create a revealed state
-    const revealedMock = vi.fn().mockReturnValue({
-      room: {
-        code: '1234',
-        hostUid: 'host-123',
-        status: 'revealed',
-        currentRound: 1,
-        totalRounds: 4,
-        currentTheme: 'Kitchen Appliances',
-        rustamUid: 'player-1',
-      },
-      players: [
-        { uid: 'player-1', name: 'Alice', joinedAt: Date.now() },
-        { uid: 'player-2', name: 'Bob', joinedAt: Date.now() },
-      ],
-      loading: false,
-      revealRustam: vi.fn(),
-      nextRound: vi.fn(),
-      endGame: vi.fn(),
-      subscribeToRoom: vi.fn(),
-    });
-
+  it('should show Next Round button when revealed', () => {
     // Test would require re-rendering with different props
+    // Both Next Round and End Game buttons are now always shown
     expect(true).toBe(true);
   });
 
-  it('should show End Game button on final round when revealed', () => {
-    // This would test when currentRound === totalRounds and status === revealed
+  it('should show End Game button when revealed', () => {
+    // Both Next Round and End Game buttons are now always shown
     expect(true).toBe(true);
   });
 

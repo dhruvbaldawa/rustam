@@ -1,7 +1,7 @@
 // ABOUTME: Host lobby screen showing room code and waiting for players
 // ABOUTME: Displays QR code for easy joining and player list
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useRoom } from '../../hooks/useRoom';
@@ -12,7 +12,6 @@ export const Lobby = () => {
   const navigate = useNavigate();
   const { room, players, loading, createRoom, subscribeToRoom, restoreHostSession, startRound } = useRoom();
   const unsubscribeRef = useRef<Unsubscribe | null>(null);
-  const [rounds, setRounds] = useState(4);
   const initedRef = useRef(false);
 
   useEffect(() => {
@@ -29,14 +28,13 @@ export const Lobby = () => {
         const snapshot = await get(roomRef);
         if (snapshot.exists()) {
           const roomData = snapshot.val();
-          setRounds(roomData.totalRounds || 4);
           if (roomData.status !== 'lobby') {
             navigate('/host/game', { state: { roomCode: existingRoom }, replace: true });
           }
         }
       } else {
-        // Create new room with default rounds
-        const newRoomCode = await createRoom(rounds);
+        // Create new room
+        const newRoomCode = await createRoom();
         if (newRoomCode) {
           unsubscribeRef.current = subscribeToRoom(newRoomCode);
         }
@@ -103,20 +101,6 @@ export const Lobby = () => {
             </ul>
           </div>
         )}
-
-        {/* Round Configuration */}
-        <div className="mb-8 p-4 bg-slate-700 rounded-lg">
-          <label className="text-white text-sm mb-2 block">Number of Rounds:</label>
-          <select
-            value={rounds}
-            onChange={(e) => setRounds(parseInt(e.target.value))}
-            className="w-full px-3 py-2 bg-slate-600 text-white rounded border border-slate-500 focus:border-green-500 focus:outline-none"
-          >
-            <option value={3}>3 Rounds</option>
-            <option value={4}>4 Rounds</option>
-            <option value={5}>5 Rounds</option>
-          </select>
-        </div>
 
         {/* Start Game Button */}
         <button

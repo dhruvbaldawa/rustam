@@ -16,8 +16,9 @@ export interface RoomData {
   hostUid: string;
   status: 'lobby' | 'active' | 'revealed' | 'ended';
   currentRound: number;
-  totalRounds: number;
   createdAt: number;
+  rustamUid?: string | null;
+  currentTheme?: string | null;
 }
 
 export interface RoomContextType {
@@ -25,7 +26,7 @@ export interface RoomContextType {
   players: Player[];
   loading: boolean;
   error: string | null;
-  createRoom: (totalRounds?: number) => Promise<string | null>;
+  createRoom: () => Promise<string | null>;
   joinRoom: (roomCode: string, playerName: string) => Promise<boolean>;
   subscribeToRoom: (roomCode: string) => Unsubscribe;
   restoreHostSession: () => Promise<string | null>;
@@ -78,7 +79,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
   // Create a new room
   const createRoom = useCallback(
-    async (totalRounds: number = 4): Promise<string | null> => {
+    async (): Promise<string | null> => {
       if (!auth.currentUser) {
         setError('Not authenticated');
         return null;
@@ -97,7 +98,6 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
           hostUid,
           status: 'lobby' as const,
           currentRound: 0,
-          totalRounds,
           createdAt: now,
         };
 
@@ -374,14 +374,6 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
       if (!roomSnapshot.exists()) {
         setError('Room not found');
-        return false;
-      }
-
-      const roomData = roomSnapshot.val() as Omit<RoomData, 'code'>;
-
-      // Check if we've reached the final round
-      if (roomData.currentRound >= roomData.totalRounds) {
-        setError('All rounds completed');
         return false;
       }
 

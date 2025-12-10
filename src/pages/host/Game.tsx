@@ -113,7 +113,7 @@ export const Game = () => {
           </div>
         )}
 
-        <p className="text-slate-400 mb-4">Round {room.currentRound} of {room.totalRounds}</p>
+        <p className="text-slate-400 mb-4">Round {room.currentRound}</p>
         <p className="text-slate-300 text-lg mb-8">Theme: {room.currentTheme || 'Loading...'}</p>
 
         {!isRevealed ? (
@@ -138,23 +138,21 @@ export const Game = () => {
               <p className="text-white text-3xl font-bold">{rustamName}</p>
             </div>
 
-            {room.currentRound < room.totalRounds ? (
-              <button
-                onClick={handleNextRound}
-                disabled={operationLoading}
-                className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {operationLoading ? 'Starting next round...' : 'Next Round'}
-              </button>
-            ) : (
-              <button
-                onClick={handleEndGame}
-                disabled={operationLoading}
-                className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {operationLoading ? 'Ending game...' : 'End Game'}
-              </button>
-            )}
+            <button
+              onClick={handleNextRound}
+              disabled={operationLoading}
+              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {operationLoading ? 'Starting next round...' : 'Next Round'}
+            </button>
+
+            <button
+              onClick={handleEndGame}
+              disabled={operationLoading}
+              className="w-full py-3 px-4 rounded-lg font-bold text-white bg-slate-600 hover:bg-slate-500 transition text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {operationLoading ? 'Ending game...' : 'End Game'}
+            </button>
           </>
         )}
 
