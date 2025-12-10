@@ -1,7 +1,7 @@
 // ABOUTME: Host lobby screen showing room code and waiting for players
 // ABOUTME: Displays QR code for easy joining and player list
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useRoom } from '../../hooks/useRoom';
@@ -11,16 +11,19 @@ import { db } from '../../lib/firebase';
 export const Lobby = () => {
   const navigate = useNavigate();
   const { room, players, loading, createRoom, subscribeToRoom, restoreHostSession, startRound } = useRoom();
-  const [unsubscribe, setUnsubscribe] = useState<Unsubscribe | null>(null);
+  const unsubscribeRef = useRef<Unsubscribe | null>(null);
   const [rounds, setRounds] = useState(4);
+  const initedRef = useRef(false);
 
   useEffect(() => {
+    if (initedRef.current) return;
+    initedRef.current = true;
+
     const initRoom = async () => {
       // Try to restore session
       const existingRoom = await restoreHostSession();
       if (existingRoom) {
-        const unsub = subscribeToRoom(existingRoom);
-        setUnsubscribe(() => unsub);
+        unsubscribeRef.current = subscribeToRoom(existingRoom);
         // If room is not in lobby state, navigate away
         const roomRef = ref(db, `rooms/${existingRoom}`);
         const snapshot = await get(roomRef);
@@ -35,8 +38,7 @@ export const Lobby = () => {
         // Create new room with default rounds
         const newRoomCode = await createRoom(rounds);
         if (newRoomCode) {
-          const unsub = subscribeToRoom(newRoomCode);
-          setUnsubscribe(() => unsub);
+          unsubscribeRef.current = subscribeToRoom(newRoomCode);
         }
       }
     };
@@ -44,12 +46,12 @@ export const Lobby = () => {
     initRoom();
 
     return () => {
-      if (unsubscribe) {
-        unsubscribe();
+      if (unsubscribeRef.current) {
+        unsubscribeRef.current();
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createRoom, restoreHostSession, subscribeToRoom, navigate]);
+  }, []);
 
   if (loading || !room) {
     return (
