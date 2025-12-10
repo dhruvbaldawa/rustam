@@ -47,7 +47,6 @@ export const Lobby = () => {
   }
 
   const joinUrl = `${window.location.origin}/play?code=${room.code}`;
-  const canStartGame = players.length >= 2;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 p-4">
@@ -74,7 +73,7 @@ export const Lobby = () => {
         {/* Player Count */}
         <div className="mb-8 p-4 bg-slate-700 rounded-lg">
           <p className="text-white text-lg">
-            {players.length} / 12 players
+            {players.length} {players.length === 1 ? 'player' : 'players'}
           </p>
         </div>
 
@@ -93,14 +92,9 @@ export const Lobby = () => {
         {/* Start Game Button */}
         <button
           onClick={() => navigate('/host/game', { state: { roomCode: room.code } })}
-          disabled={!canStartGame}
-          className={`w-full py-3 px-4 rounded-lg font-bold text-white transition ${
-            canStartGame
-              ? 'bg-green-500 hover:bg-green-600 cursor-pointer'
-              : 'bg-gray-600 cursor-not-allowed opacity-50'
-          }`}
+          className="w-full py-3 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition cursor-pointer"
         >
-          {canStartGame ? 'Start Game' : `Waiting for players (${players.length}/2)`}
+          Start Game
         </button>
 
         <button

@@ -129,7 +129,7 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
 
         const roomData = snapshot.val() as Omit<RoomData, 'code'>;
         if (roomData.status !== 'lobby') {
-          setError('Room is not in lobby state');
+          setError('Room is not in active state');
           return false;
         }
 
