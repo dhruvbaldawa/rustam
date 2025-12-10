@@ -1,126 +1,333 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { RoomContext } from '../../contexts/RoomContext';
 
-// NOTE: These integration tests are placeholders for future implementation.
-// They require Firebase Realtime Database emulator setup and full end-to-end testing.
-// Marked as .skip() to prevent false-passing placeholders from inflating test counts.
+// Import components for integration testing
+import { Home } from '../../pages/Home';
+import { Join } from '../../pages/player/Join';
+import { Lobby } from '../../pages/host/Lobby';
+import { Game } from '../../pages/host/Game';
+import { HostGameOver } from '../../pages/host/GameOver';
+import { GameOver as PlayerGameOver } from '../../pages/player/GameOver';
 
-describe('Full Game Flow Integration Tests (PLACEHOLDER)', () => {
-  describe.skip('Single Round Game', () => {
-    it('should complete a full game: create room → join → start → reveal → end', async () => {
-      // TODO: Implement with Firebase emulator
-      // 1. Host creates room
-      // 2. Players join room
-      // 3. Host starts round
-      // 4. Players see roles
-      // 5. Host reveals rustam
-      // 6. Players see who rustam was
-      // 7. Game ends
-      expect(true).toBe(true);
+// ============================================================================
+// Test Utilities - Mock Room Context Factory
+// ============================================================================
+
+interface MockRoomConfig {
+  room?: {
+    code: string;
+    hostUid: string;
+    status: 'lobby' | 'active' | 'revealed' | 'ended';
+    currentRound: number;
+    currentTheme?: string;
+    rustamUid?: string;
+    createdAt: number;
+  } | null;
+  players?: Array<{ uid: string; name: string; joinedAt: number }>;
+  loading?: boolean;
+  error?: string | null;
+}
+
+const createMockRoomContext = (config: MockRoomConfig = {}) => {
+  const defaultRoom = {
+    code: '1234',
+    hostUid: 'host-123',
+    status: 'lobby' as const,
+    currentRound: 0,
+    createdAt: Date.now(),
+  };
+
+  const defaultPlayers = [
+    { uid: 'player-1', name: 'Alice', joinedAt: Date.now() },
+    { uid: 'player-2', name: 'Bob', joinedAt: Date.now() },
+  ];
+
+  return {
+    room: config.room ?? defaultRoom,
+    players: config.players ?? defaultPlayers,
+    loading: config.loading ?? false,
+    error: config.error ?? null,
+    createRoom: vi.fn().mockResolvedValue('1234'),
+    joinRoom: vi.fn().mockResolvedValue(true),
+    startRound: vi.fn().mockResolvedValue(true),
+    revealRustam: vi.fn().mockResolvedValue(true),
+    nextRound: vi.fn().mockResolvedValue(true),
+    endGame: vi.fn().mockResolvedValue(true),
+    leaveRoom: vi.fn(),
+    subscribeToRoom: vi.fn(() => vi.fn()),
+    restoreHostSession: vi.fn().mockResolvedValue(null),
+    restorePlayerSession: vi.fn().mockResolvedValue(null),
+  };
+};
+
+// Mock Firebase
+vi.mock('../../lib/firebase', () => ({
+  db: {},
+  auth: {
+    currentUser: { uid: 'test-user-123' },
+  },
+}));
+
+// Mock useAuth hook
+vi.mock('../../hooks/useAuth', () => ({
+  useAuth: () => ({ loading: false }),
+}));
+
+// ============================================================================
+// Integration Tests - Navigation Flows
+// ============================================================================
+
+describe('Integration: Home Page Navigation', () => {
+  it('should navigate to host lobby when Host Game clicked', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/host" element={<div data-testid="host-lobby">Host Lobby</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const hostButton = screen.getByRole('button', { name: /Host Game/i });
+    await user.click(hostButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('host-lobby')).toBeInTheDocument();
     });
   });
 
-  describe.skip('Multi-Round Game', () => {
-    it('should cycle through 4 rounds with different themes', async () => {
-      // TODO: Implement with Firebase emulator
-      // Verify:
-      // Round 1: Kitchen Appliances
-      // Round 2: Vehicles
-      // Round 3: Furniture
-      // Round 4: Animals
-      // Then game ends
-      expect(true).toBe(true);
+  it('should navigate to player join when Join Game clicked', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/play" element={<div data-testid="player-join">Player Join</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const joinButton = screen.getByRole('button', { name: /Join Game/i });
+    await user.click(joinButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('player-join')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Integration: Host Game Over Flow', () => {
+  it('should clear room and navigate home when Back to Home clicked', async () => {
+    const user = userEvent.setup();
+    const mockContext = createMockRoomContext({
+      room: {
+        code: '1234',
+        hostUid: 'host-123',
+        status: 'ended',
+        currentRound: 4,
+        createdAt: Date.now(),
+      },
     });
 
-    it('should assign different Rustam each round', async () => {
-      // TODO: Verify that rustamUid changes between rounds
-      expect(true).toBe(true);
-    });
+    render(
+      <RoomContext.Provider value={mockContext}>
+        <MemoryRouter initialEntries={['/host/gameover']}>
+          <Routes>
+            <Route path="/host/gameover" element={<HostGameOver />} />
+            <Route path="/" element={<div data-testid="home-page">Home</div>} />
+          </Routes>
+        </MemoryRouter>
+      </RoomContext.Provider>
+    );
 
-    it('should clear old roles before next round', async () => {
-      // TODO: Verify nextRound() clears roles from Firebase
-      expect(true).toBe(true);
+    const homeButton = screen.getByText(/Back to Home/i);
+    await user.click(homeButton);
+
+    expect(mockContext.leaveRoom).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.getByTestId('home-page')).toBeInTheDocument();
     });
   });
 
-  describe.skip('Session Persistence', () => {
-    it('should restore host session after page refresh', async () => {
-      // TODO: Implement with localStorage verification
-      // 1. Host creates room
-      // 2. Save room code to localStorage
-      // 3. Simulate page refresh
-      // 4. Host should be in same room
-      expect(true).toBe(true);
+  it('should set skip_session_restore and navigate to /host when Create New Room clicked', async () => {
+    const user = userEvent.setup();
+    const mockContext = createMockRoomContext({
+      room: {
+        code: '1234',
+        hostUid: 'host-123',
+        status: 'ended',
+        currentRound: 4,
+        createdAt: Date.now(),
+      },
     });
 
-    it('should restore player session after page refresh', async () => {
-      // TODO: Implement with localStorage verification
-      // 1. Player joins room
-      // 2. Save room code + player uid to localStorage
-      // 3. Simulate page refresh
-      // 4. Player should be in same room
-      expect(true).toBe(true);
+    render(
+      <RoomContext.Provider value={mockContext}>
+        <MemoryRouter initialEntries={['/host/gameover']}>
+          <Routes>
+            <Route path="/host/gameover" element={<HostGameOver />} />
+            <Route path="/host" element={<div data-testid="new-lobby">New Lobby</div>} />
+          </Routes>
+        </MemoryRouter>
+      </RoomContext.Provider>
+    );
+
+    const createButton = screen.getByRole('button', { name: /Create New Room/i });
+    await user.click(createButton);
+
+    expect(mockContext.leaveRoom).toHaveBeenCalled();
+    expect(sessionStorage.getItem('skip_session_restore')).toBe('true');
+    await waitFor(() => {
+      expect(screen.getByTestId('new-lobby')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Integration: Player Game Over Flow', () => {
+  it('should clear room and navigate home when Play Again clicked', async () => {
+    const user = userEvent.setup();
+    const mockContext = createMockRoomContext({
+      room: {
+        code: '1234',
+        hostUid: 'host-123',
+        status: 'ended',
+        currentRound: 4,
+        createdAt: Date.now(),
+      },
+    });
+
+    render(
+      <RoomContext.Provider value={mockContext}>
+        <MemoryRouter initialEntries={['/play/gameover']}>
+          <Routes>
+            <Route path="/play/gameover" element={<PlayerGameOver />} />
+            <Route path="/" element={<div data-testid="home-page">Home</div>} />
+          </Routes>
+        </MemoryRouter>
+      </RoomContext.Provider>
+    );
+
+    const playAgainButton = screen.getByRole('button', { name: /Play Again/i });
+    await user.click(playAgainButton);
+
+    expect(mockContext.leaveRoom).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.getByTestId('home-page')).toBeInTheDocument();
+    });
+  });
+});
+
+// ============================================================================
+// Integration Tests - Game State Transitions
+// ============================================================================
+
+describe('Integration: Host Lobby to Game Transition', () => {
+  it('should start round with selected theme when Start Game clicked', async () => {
+    const user = userEvent.setup();
+    const mockContext = createMockRoomContext();
+
+    render(
+      <RoomContext.Provider value={mockContext}>
+        <MemoryRouter initialEntries={['/host']}>
+          <Routes>
+            <Route path="/host" element={<Lobby />} />
+            <Route path="/host/game" element={<div data-testid="game-screen">Game Screen</div>} />
+          </Routes>
+        </MemoryRouter>
+      </RoomContext.Provider>
+    );
+
+    // Select Vehicles theme
+    const vehiclesButton = screen.getByRole('button', { name: /Vehicles/i });
+    await user.click(vehiclesButton);
+
+    // Click Start Game
+    const startButton = screen.getByRole('button', { name: /Start Game/i });
+    await user.click(startButton);
+
+    await waitFor(() => {
+      expect(mockContext.startRound).toHaveBeenCalledWith('1234', 'Vehicles');
     });
   });
 
-  describe.skip('Player Transitions', () => {
-    it('should navigate: Join → Waiting → RoleReveal → RustamRevealed → GameOver', async () => {
-      // TODO: Verify complete player navigation flow
-      expect(true).toBe(true);
-    });
+  it('should use Random theme by default', async () => {
+    const user = userEvent.setup();
+    const mockContext = createMockRoomContext();
 
-    it('should auto-navigate to RoleReveal when status changes to active', async () => {
-      // TODO: Player waiting in lobby, host starts round
-      // Player should auto-navigate to RoleReveal
-      expect(true).toBe(true);
-    });
+    render(
+      <RoomContext.Provider value={mockContext}>
+        <MemoryRouter initialEntries={['/host']}>
+          <Routes>
+            <Route path="/host" element={<Lobby />} />
+            <Route path="/host/game" element={<div data-testid="game-screen">Game Screen</div>} />
+          </Routes>
+        </MemoryRouter>
+      </RoomContext.Provider>
+    );
 
-    it('should auto-navigate to RustamRevealed when status changes to revealed', async () => {
-      // TODO: Player in RoleReveal, host reveals rustam
-      // Player should auto-navigate to RustamRevealed
-      expect(true).toBe(true);
-    });
+    // Click Start Game without changing theme
+    const startButton = screen.getByRole('button', { name: /Start Game/i });
+    await user.click(startButton);
 
-    it('should auto-navigate to GameOver when status changes to ended', async () => {
-      // TODO: Player in RustamRevealed, host ends game
-      // Player should auto-navigate to GameOver
-      expect(true).toBe(true);
+    await waitFor(() => {
+      expect(mockContext.startRound).toHaveBeenCalledWith('1234', 'Random');
     });
   });
+});
 
-  describe.skip('Game Constraints', () => {
-    it('should require at least 2 players to start round', async () => {
-      // TODO: Host tries to start round with <2 players, should show error
-      expect(true).toBe(true);
+describe('Integration: Host Game Controls', () => {
+  it('should reveal Rustam when Reveal button clicked', async () => {
+    const user = userEvent.setup();
+    const mockContext = createMockRoomContext({
+      room: {
+        code: '1234',
+        hostUid: 'host-123',
+        status: 'active',
+        currentRound: 1,
+        currentTheme: 'Kitchen Appliances',
+        rustamUid: 'player-1',
+        createdAt: Date.now(),
+      },
     });
 
-    it('should enforce round limit', async () => {
-      // TODO: Complete all totalRounds, then:
-      // "End Game" button appears instead of "Next Round"
-      expect(true).toBe(true);
-    });
+    render(
+      <RoomContext.Provider value={mockContext}>
+        <MemoryRouter initialEntries={['/host/game']} >
+          <Routes>
+            <Route path="/host/game" element={<Game />} />
+          </Routes>
+        </MemoryRouter>
+      </RoomContext.Provider>
+    );
 
-    it('should not allow joining room not in lobby status', async () => {
-      // TODO: Try to join room with status === active, should fail
-      expect(true).toBe(true);
+    const revealButton = screen.getByRole('button', { name: /Reveal Rustam/i });
+    await user.click(revealButton);
+
+    await waitFor(() => {
+      expect(mockContext.revealRustam).toHaveBeenCalledWith('1234');
     });
   });
+});
 
-  describe.skip('Security', () => {
-    it('should not expose rustamUid until reveal', async () => {
-      // TODO: During active round, player cannot read rustamUid
-      // After reveal, player can read rustamUid
-      expect(true).toBe(true);
-    });
+// ============================================================================
+// Placeholder Tests for Firebase Emulator
+// NOTE: These require Firebase emulator setup for full e2e testing
+// ============================================================================
 
-    it('should not allow players to read other players\' roles', async () => {
-      // TODO: Player A should only see their own role
-      // Player A cannot read Player B's role path
-      expect(true).toBe(true);
-    });
+describe.skip('Full Game Flow (Requires Firebase Emulator)', () => {
+  it('should complete a full game: create room → join → start → reveal → end', async () => {
+    // This would require Firebase emulator for proper e2e testing
+    expect(true).toBe(true);
+  });
 
-    it('should only allow host to write roles', async () => {
-      // TODO: Only hostUid can write to roles/* paths
-      expect(true).toBe(true);
-    });
+  it('should persist session across page refresh', async () => {
+    // This would require testing localStorage + Firebase state together
+    expect(true).toBe(true);
   });
 });
