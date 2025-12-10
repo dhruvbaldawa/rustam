@@ -3,7 +3,11 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useRoom } from '../../hooks/useRoom';
+import { ArrowLeft, Eye, SkipForward, XCircle, AlertCircle } from 'lucide-react';
+import { useRoom } from '@/hooks/useRoom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { PageLayout } from '@/components/game/page-layout';
 
 interface LocationState {
   roomCode: string;
@@ -102,9 +106,12 @@ export const Game = () => {
 
   if (loading || !room) {
     return (
-      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800">
-        <p className="text-white text-xl">Loading game...</p>
-      </div>
+      <PageLayout>
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-white text-xl">Loading game...</p>
+        </div>
+      </PageLayout>
     );
   }
 
@@ -112,64 +119,103 @@ export const Game = () => {
   const displayError = error || operationError;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
-      <div className="w-full max-w-md text-center">
-        {displayError && (
-          <div className="mb-4 p-4 bg-red-900/50 border border-red-500 rounded-lg">
-            <p className="text-red-300 text-sm font-semibold">{displayError}</p>
-          </div>
-        )}
+    <PageLayout>
+      <div className="w-full max-w-md space-y-6">
+        {/* Round & Theme Info */}
+        <div className="text-center fade-in-up">
+          <p className="text-muted-foreground text-sm mb-1">Round {room.currentRound}</p>
+          <p className="text-xl font-semibold text-foreground">
+            Theme: <span className="text-accent">{room.currentTheme || 'Loading...'}</span>
+          </p>
+        </div>
 
-        <p className="text-slate-400 mb-4">Round {room.currentRound}</p>
-        <p className="text-slate-300 text-lg mb-8">Theme: {room.currentTheme || 'Loading...'}</p>
+        {/* Error Display */}
+        {displayError && (
+          <Card className="bg-destructive/20 border-destructive fade-in-up">
+            <CardContent className="p-4 flex items-center gap-3">
+              <AlertCircle className="w-5 h-5 text-destructive" />
+              <p className="text-destructive-foreground text-sm font-medium">{displayError}</p>
+            </CardContent>
+          </Card>
+        )}
 
         {!isRevealed ? (
           <>
-            <div className="mb-8 p-6 bg-slate-700 rounded-lg">
-              <p className="text-slate-300 text-sm mb-2">The Rustam is:</p>
-              <p className="text-white text-3xl font-bold">{rustamName || 'Selecting...'}</p>
-            </div>
+            {/* Rustam Identity Card - Pre-Reveal */}
+            <Card glass glow className="fade-in-up" style={{ animationDelay: '50ms' }}>
+              <CardContent className="p-8 text-center">
+                <p className="text-muted-foreground text-sm mb-2">The Rustam is</p>
+                <p className="text-4xl font-bold text-white text-glow">
+                  {rustamName || 'Selecting...'}
+                </p>
+                <p className="text-xs text-muted-foreground mt-4">Only you can see this</p>
+              </CardContent>
+            </Card>
 
-            <button
+            {/* Reveal Button */}
+            <Button
               onClick={handleReveal}
               disabled={operationLoading}
-              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 btn-hover transition-all active:scale-[0.98] focus-visible text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="destructive"
+              size="xl"
+              className="w-full gap-3 fade-in-up"
+              style={{ animationDelay: '100ms' }}
             >
+              <Eye className="w-6 h-6" />
               {operationLoading ? 'Revealing...' : 'Reveal Rustam'}
-            </button>
+            </Button>
           </>
         ) : (
           <>
-            <div className="mb-8 p-6 bg-red-500/20 border border-red-500 rounded-lg">
-              <p className="text-red-300 text-sm mb-2">The Rustam was:</p>
-              <p className="text-white text-3xl font-bold">{rustamName}</p>
-            </div>
+            {/* Rustam Identity Card - Post-Reveal */}
+            <Card className="bg-destructive/20 border-destructive fade-in-up">
+              <CardContent className="p-8 text-center">
+                <p className="text-destructive text-sm mb-2">The Rustam was</p>
+                <p className="text-4xl font-bold text-white text-glow-red">
+                  {rustamName}
+                </p>
+                <p className="text-xs text-muted-foreground mt-4">Everyone can see this now</p>
+              </CardContent>
+            </Card>
 
-            <button
+            {/* Next Round Button */}
+            <Button
               onClick={handleNextRound}
               disabled={operationLoading}
-              className="w-full py-4 px-4 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 btn-hover transition-all active:scale-[0.98] focus-visible text-lg mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="success"
+              size="xl"
+              className="w-full gap-3 fade-in-up"
+              style={{ animationDelay: '100ms' }}
             >
-              {operationLoading ? 'Starting next round...' : 'Next Round'}
-            </button>
+              <SkipForward className="w-6 h-6" />
+              {operationLoading ? 'Starting...' : 'Next Round'}
+            </Button>
 
-            <button
+            {/* End Game Button */}
+            <Button
               onClick={handleEndGame}
               disabled={operationLoading}
-              className="w-full py-3 px-4 rounded-lg font-bold text-white bg-slate-600 hover:bg-slate-500 transition-all active:scale-[0.98] focus-visible text-base disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="secondary"
+              size="lg"
+              className="w-full gap-3 fade-in-up"
+              style={{ animationDelay: '150ms' }}
             >
-              {operationLoading ? 'Ending game...' : 'End Game'}
-            </button>
+              <XCircle className="w-5 h-5" />
+              {operationLoading ? 'Ending...' : 'End Game'}
+            </Button>
           </>
         )}
 
-        <button
+        {/* Back to Lobby */}
+        <Button
           onClick={() => navigate('/host', { replace: true })}
-          className="w-full mt-4 py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
+          variant="ghost"
+          className="w-full text-muted-foreground"
         >
+          <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Lobby
-        </button>
+        </Button>
       </div>
-    </div>
+    </PageLayout>
   );
 };

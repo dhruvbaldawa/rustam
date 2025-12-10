@@ -2,32 +2,52 @@
 // ABOUTME: Entry point for choosing host or player role
 
 import { useNavigate } from 'react-router-dom';
+import { Gamepad2, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { PageLayout } from '@/components/game/page-layout';
 
 export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 gap-8 safe-area-top safe-area-bottom">
-      <div className="text-center fade-in-up">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">The Rustam</h1>
-        <p className="text-xl text-slate-300 mb-12">Party Game</p>
-      </div>
+    <PageLayout>
+      <div className="w-full max-w-md text-center space-y-8">
+        {/* Title Section */}
+        <div className="space-y-2 fade-in-up">
+          <h1 className="text-5xl md:text-6xl font-bold text-white text-glow tracking-tight">
+            The Rustam
+          </h1>
+          <p className="text-xl text-muted-foreground">Party Game</p>
+        </div>
 
-      <div className="flex flex-col gap-6 w-full max-w-xs px-4">
-        <button
-          onClick={() => navigate('/host')}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all active:scale-[0.98] focus-visible"
-        >
-          Host Game
-        </button>
+        {/* Action Cards */}
+        <Card glass glow className="p-6 space-y-4 fade-in-up" style={{ animationDelay: '100ms' }}>
+          <Button
+            onClick={() => navigate('/host')}
+            size="xl"
+            className="w-full gap-3"
+          >
+            <Gamepad2 className="w-6 h-6" />
+            Host Game
+          </Button>
 
-        <button
-          onClick={() => navigate('/play')}
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all active:scale-[0.98] focus-visible"
-        >
-          Join Game
-        </button>
+          <Button
+            onClick={() => navigate('/play')}
+            variant="success"
+            size="xl"
+            className="w-full gap-3"
+          >
+            <Users className="w-6 h-6" />
+            Join Game
+          </Button>
+        </Card>
+
+        {/* Footer */}
+        <p className="text-sm text-muted-foreground fade-in-up" style={{ animationDelay: '200ms' }}>
+          Find the imposter among your friends
+        </p>
       </div>
-    </div>
+    </PageLayout>
   );
 };

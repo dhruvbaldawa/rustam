@@ -3,75 +3,112 @@
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRoom } from '../../hooks/useRoom';
+import { ArrowLeft, Clock } from 'lucide-react';
+import { useRoom } from '@/hooks/useRoom';
+import { auth } from '@/lib/firebase';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PageLayout } from '@/components/game/page-layout';
+import { PlayerList } from '@/components/game/player-list';
 
 export const Waiting = () => {
   const navigate = useNavigate();
   const { room, players, loading, subscribeToRoom } = useRoom();
 
+  // Subscribe to room updates
   useEffect(() => {
-    if (room?.code) {
-      const unsubscribe = subscribeToRoom(room.code);
-
-      // If game has started (status changed to active), navigate to role reveal
-      if (room.status === 'active') {
-        navigate('/play/role', { replace: true });
-      }
-
-      // If game ended before starting, go to game over
-      if (room.status === 'ended') {
-        navigate('/play/gameover', { replace: true });
-      }
-
-      return unsubscribe;
-    } else {
+    if (!room?.code) {
       // No room in context, go back to join
       navigate('/play', { replace: true });
+      return;
     }
-  }, [room?.code, room?.status, subscribeToRoom, navigate]);
+
+    const unsubscribe = subscribeToRoom(room.code);
+    return unsubscribe;
+  }, [room?.code, subscribeToRoom, navigate]);
+
+  // Handle navigation based on room status - separate effect
+  useEffect(() => {
+    if (!room?.status) return;
+
+    // If game has started (status changed to active), navigate to role reveal
+    if (room.status === 'active') {
+      navigate('/play/role', { replace: true });
+      return;
+    }
+
+    // If rustam has been revealed, go to revealed screen
+    if (room.status === 'revealed') {
+      navigate('/play/revealed', { replace: true });
+      return;
+    }
+
+    // If game ended, go to game over
+    if (room.status === 'ended') {
+      navigate('/play/gameover', { replace: true });
+      return;
+    }
+  }, [room?.status, navigate]);
 
   if (!room) {
     return (
-      <div className="flex items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800">
-        <p className="text-white text-xl">Loading...</p>
-      </div>
+      <PageLayout>
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-white text-xl">Loading...</p>
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-slate-800 p-4 safe-area-top safe-area-bottom">
-      <div className="w-full max-w-md text-center">
-        <h1 className="text-4xl font-bold text-white mb-2">The Rustam</h1>
-        <p className="text-slate-300 mb-8">Waiting for host to start...</p>
+    <PageLayout>
+      <div className="w-full max-w-md space-y-6">
+        {/* Header */}
+        <div className="text-center fade-in-up">
+          <h1 className="text-4xl font-bold text-white text-glow mb-1">The Rustam</h1>
+          <div className="flex items-center justify-center gap-2 text-muted-foreground">
+            <Clock className="w-4 h-4 animate-pulse" />
+            <p>Waiting for host to start...</p>
+          </div>
+        </div>
 
         {/* Player Count */}
-        <div className="mb-8 p-4 bg-slate-700 rounded-lg">
-          <p className="text-white text-lg">
-            {players.length} {players.length === 1 ? 'player' : 'players'} in game
-          </p>
-        </div>
+        <Card glass glow className="fade-in-up" style={{ animationDelay: '50ms' }}>
+          <CardContent className="p-6 text-center">
+            <p className="text-4xl font-bold text-white text-glow mb-1">
+              {players.length}
+            </p>
+            <p className="text-muted-foreground">
+              {players.length === 1 ? 'player' : 'players'} in game
+            </p>
+          </CardContent>
+        </Card>
 
-        {/* Player List */}
-        <div className="mb-8 p-4 bg-slate-700 rounded-lg text-left">
-          <h3 className="text-white font-semibold mb-3">Players:</h3>
-          <ul className="text-slate-300 text-sm space-y-2">
-            {players.map((player) => (
-              <li key={player.uid} className="flex items-center">
-                <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                {player.name}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Player List Card */}
+        <Card glass className="fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Players</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PlayerList
+              players={players}
+              highlightUid={auth.currentUser?.uid}
+            />
+          </CardContent>
+        </Card>
 
         {/* Leave Button */}
-        <button
+        <Button
           onClick={() => navigate('/')}
-          className="w-full py-3 px-4 rounded-lg font-semibold text-slate-300 hover:text-white transition-all active:scale-[0.98] focus-visible"
+          variant="ghost"
+          className="w-full text-muted-foreground fade-in-up"
+          style={{ animationDelay: '150ms' }}
         >
+          <ArrowLeft className="w-4 h-4 mr-2" />
           Leave Game
-        </button>
+        </Button>
       </div>
-    </div>
+    </PageLayout>
   );
 };
