@@ -1,0 +1,5 @@
+/* ABOUTME: Main app styles (minimal, relies on Tailwind) */
+#root {
+  width: 100%;
+  height: 100%;
+}
