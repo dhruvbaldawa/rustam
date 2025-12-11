@@ -14,11 +14,13 @@ export const Home = () => {
     <PageLayout>
       <div className="w-full max-w-md text-center space-y-8">
         {/* Title Section */}
-        <div className="space-y-2 fade-in-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-white text-glow tracking-tight">
-            The Rustam
+        <div className="space-y-1">
+          <p className="text-2xl md:text-3xl text-white/80 slide-up-title" style={{ animationDelay: '200ms' }}>
+            कहाँ है
+          </p>
+          <h1 className="text-6xl md:text-7xl font-black text-white text-glow tracking-tight slide-up-title" style={{ animationDelay: '350ms' }}>
+            Rustam
           </h1>
-          <p className="text-xl text-muted-foreground">Party Game</p>
         </div>
 
         {/* Action Cards */}

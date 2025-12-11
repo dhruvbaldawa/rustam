@@ -66,7 +66,7 @@ export const Waiting = () => {
       <div className="w-full max-w-md space-y-6">
         {/* Header */}
         <div className="text-center fade-in-up">
-          <h1 className="text-4xl font-bold text-white text-glow mb-1">The Rustam</h1>
+          <h1 className="text-4xl font-bold text-white text-glow mb-1">कहाँ है Rustam</h1>
           <div className="flex items-center justify-center gap-2 text-muted-foreground">
             <Clock className="w-4 h-4 animate-pulse" />
             <p>Waiting for host to start...</p>

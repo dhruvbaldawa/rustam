@@ -96,7 +96,7 @@ export const RustamRevealed = () => {
       <div className="w-full max-w-md space-y-6 text-center">
         {/* Header */}
         <div className="fade-in-up">
-          <h1 className="text-4xl font-bold text-white text-glow mb-1">The Rustam</h1>
+          <h1 className="text-4xl font-bold text-white text-glow mb-1">कहाँ है Rustam</h1>
           <p className="text-muted-foreground">Round {room.currentRound} revealed</p>
         </div>
 
