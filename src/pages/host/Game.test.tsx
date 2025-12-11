@@ -13,6 +13,8 @@ vi.mock('../../hooks/useRoom', () => ({
       status: 'active',
       currentRound: 1,
       currentTheme: 'Kitchen Appliances',
+      currentWord: 'Mixer-grinder',
+      currentWordHindi: 'मिक्सर-ग्राइंडर',
       rustamUid: 'player-1',
       createdAt: Date.now(),
     },

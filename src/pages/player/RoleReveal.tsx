@@ -11,8 +11,6 @@ import { Button } from '@/components/ui/button';
 
 interface PlayerRole {
   isRustam: boolean;
-  theme: string | null;
-  option: string | null;
 }
 
 export const RoleReveal = () => {
@@ -149,10 +147,10 @@ export const RoleReveal = () => {
             <div className="mb-6 fade-in-up">
               <span className="text-6xl md:text-7xl">✨</span>
             </div>
-            <p className="text-white/60 text-sm md:text-base mb-1 fade-in-up">Theme: {role.theme}</p>
+            <p className="text-white/60 text-sm md:text-base mb-1 fade-in-up">Theme: {room?.currentTheme}</p>
             <p className="text-white/80 text-lg md:text-xl mb-2 fade-in-up">You are:</p>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 fade-in-up role-pulse">
-              {role.option || role.theme}
+              {room?.currentWord || room?.currentTheme}
             </h1>
             <div className="bg-white/10 rounded-xl p-4 fade-in-up" style={{ animationDelay: '200ms' }}>
               <p className="text-white/80 text-sm md:text-base flex items-center justify-center gap-2">

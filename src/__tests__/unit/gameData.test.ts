@@ -1,13 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   gameData,
   getThemeNames,
-  getCategoryByName,
-  getQuestionsForCategory,
-  getOptionsForCategory,
+  getThemeByName,
+  getRandomWordFromTheme,
+  getQuestionsForWord,
   getPhysicalFormatInfo,
   shuffleArray,
-  getRandomOptions,
+  Question,
 } from '../../lib/gameData';
 
 describe('gameData', () => {
@@ -18,9 +18,9 @@ describe('gameData', () => {
       expect(gameData.gameInfo.version).toBeDefined();
     });
 
-    it('should have categories array', () => {
-      expect(Array.isArray(gameData.categories)).toBe(true);
-      expect(gameData.categories.length).toBeGreaterThan(0);
+    it('should have themes array', () => {
+      expect(Array.isArray(gameData.themes)).toBe(true);
+      expect(gameData.themes.length).toBeGreaterThan(0);
     });
 
     it('should have physicalFormats', () => {
@@ -47,63 +47,90 @@ describe('gameData', () => {
     });
   });
 
-  describe('getCategoryByName', () => {
-    it('should return category for valid theme name', () => {
-      const category = getCategoryByName('Kitchen Appliances');
-      expect(category).toBeDefined();
-      expect(category?.name).toBe('Kitchen Appliances');
-      expect(category?.options).toBeDefined();
-      expect(category?.questions).toBeDefined();
+  describe('getThemeByName', () => {
+    it('should return theme for valid theme name', () => {
+      const theme = getThemeByName('Kitchen Appliances');
+      expect(theme).toBeDefined();
+      expect(theme?.name).toBe('Kitchen Appliances');
+      expect(theme?.words).toBeDefined();
+      expect(Array.isArray(theme?.words)).toBe(true);
     });
 
     it('should return undefined for unknown theme', () => {
-      const category = getCategoryByName('Nonexistent Theme');
-      expect(category).toBeUndefined();
+      const theme = getThemeByName('Nonexistent Theme');
+      expect(theme).toBeUndefined();
     });
 
-    it('should return category with correct structure', () => {
-      const category = getCategoryByName('Vehicles');
-      expect(category).toBeDefined();
-      expect(category?.id).toBeDefined();
-      expect(category?.nameHindi).toBeDefined();
-      expect(category?.difficulty).toMatch(/^(easy|medium|hard)$/);
-      expect(category?.style).toMatch(/^(yours|youAreIt)$/);
-    });
-  });
-
-  describe('getQuestionsForCategory', () => {
-    it('should return questions array for valid category', () => {
-      const questions = getQuestionsForCategory('Kitchen Appliances');
-      expect(Array.isArray(questions)).toBe(true);
-      expect(questions.length).toBeGreaterThan(0);
+    it('should return theme with correct structure', () => {
+      const theme = getThemeByName('Vehicles');
+      expect(theme).toBeDefined();
+      expect(theme?.id).toBeDefined();
+      expect(theme?.nameHindi).toBeDefined();
+      expect(theme?.difficulty).toMatch(/^(easy|medium|hard)$/);
+      expect(theme?.style).toMatch(/^(yours|youAreIt)$/);
     });
 
-    it('should return empty array for unknown category', () => {
-      const questions = getQuestionsForCategory('Nonexistent');
-      expect(questions).toEqual([]);
-    });
-
-    it('should return questions with correct type field', () => {
-      const questions = getQuestionsForCategory('Kitchen Appliances');
-      questions.forEach((q) => {
-        expect(['hotSeat', 'physical']).toContain(q.type);
-        expect(q.question).toBeDefined();
-        expect(q.questionHindi).toBeDefined();
+    it('should have words with nested questions', () => {
+      const theme = getThemeByName('Kitchen Appliances');
+      expect(theme?.words.length).toBeGreaterThan(0);
+      theme?.words.forEach((word) => {
+        expect(word.word).toBeDefined();
+        expect(word.wordHindi).toBeDefined();
+        expect(Array.isArray(word.questions)).toBe(true);
+        expect(word.questions.length).toBeGreaterThan(0);
       });
     });
   });
 
-  describe('getOptionsForCategory', () => {
-    it('should return options array for valid category', () => {
-      const options = getOptionsForCategory('Kitchen Appliances');
-      expect(Array.isArray(options)).toBe(true);
-      expect(options.length).toBeGreaterThan(0);
-      expect(options.every((o) => typeof o === 'string')).toBe(true);
+  describe('getRandomWordFromTheme', () => {
+    it('should return a word from the theme', () => {
+      const word = getRandomWordFromTheme('Kitchen Appliances');
+      expect(word).toBeDefined();
+      expect(word?.word).toBeDefined();
+      expect(word?.wordHindi).toBeDefined();
+      expect(Array.isArray(word?.questions)).toBe(true);
     });
 
-    it('should return empty array for unknown category', () => {
-      const options = getOptionsForCategory('Nonexistent');
-      expect(options).toEqual([]);
+    it('should return undefined for unknown theme', () => {
+      const word = getRandomWordFromTheme('Nonexistent');
+      expect(word).toBeUndefined();
+    });
+
+    it('should return different words over multiple calls', () => {
+      const words = new Set<string>();
+      for (let i = 0; i < 50; i++) {
+        const word = getRandomWordFromTheme('Kitchen Appliances');
+        if (word) words.add(word.word);
+      }
+      // Should get at least 2 different words
+      expect(words.size).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  describe('getQuestionsForWord', () => {
+    it('should return questions array for valid theme and word', () => {
+      const questions = getQuestionsForWord('Kitchen Appliances', 'Mixer-grinder');
+      expect(Array.isArray(questions)).toBe(true);
+      expect(questions.length).toBeGreaterThan(0);
+    });
+
+    it('should return empty array for unknown theme', () => {
+      const questions = getQuestionsForWord('Nonexistent', 'Mixer-grinder');
+      expect(questions).toEqual([]);
+    });
+
+    it('should return empty array for unknown word', () => {
+      const questions = getQuestionsForWord('Kitchen Appliances', 'Nonexistent Item');
+      expect(questions).toEqual([]);
+    });
+
+    it('should return questions with correct type field', () => {
+      const questions = getQuestionsForWord('Kitchen Appliances', 'Mixer-grinder');
+      questions.forEach((q: Question) => {
+        expect(['hotSeat', 'physical']).toContain(q.type);
+        expect(q.question).toBeDefined();
+        expect(q.questionHindi).toBeDefined();
+      });
     });
   });
 
@@ -168,42 +195,6 @@ describe('gameData', () => {
       }
 
       // Should produce at least 2 different orderings
-      expect(results.size).toBeGreaterThanOrEqual(2);
-    });
-  });
-
-  describe('getRandomOptions', () => {
-    it('should return requested number of options', () => {
-      const options = getRandomOptions('Kitchen Appliances', 3);
-      expect(options.length).toBe(3);
-    });
-
-    it('should return unique options', () => {
-      const options = getRandomOptions('Kitchen Appliances', 5);
-      const uniqueOptions = new Set(options);
-      expect(uniqueOptions.size).toBe(options.length);
-    });
-
-    it('should limit to available options if count exceeds', () => {
-      const allOptions = getOptionsForCategory('Kitchen Appliances');
-      const requested = allOptions.length + 10;
-      const options = getRandomOptions('Kitchen Appliances', requested);
-      expect(options.length).toBe(allOptions.length);
-    });
-
-    it('should return empty array for unknown category', () => {
-      const options = getRandomOptions('Nonexistent', 5);
-      expect(options).toEqual([]);
-    });
-
-    it('should return different selections on repeated calls', () => {
-      const results = new Set<string>();
-
-      for (let i = 0; i < 20; i++) {
-        results.add(JSON.stringify(getRandomOptions('Kitchen Appliances', 3).sort()));
-      }
-
-      // Should get at least 2 different selections
       expect(results.size).toBeGreaterThanOrEqual(2);
     });
   });

@@ -10,9 +10,30 @@ import { PageLayout } from '@/components/game/page-layout';
 export const Home = () => {
   const navigate = useNavigate();
 
+  // Balloon positions and delays for staggered animation
+  const balloons = [
+    { emoji: '🎈', left: '5%', delay: '0s' },
+    { emoji: '🎈', left: '15%', delay: '2s' },
+    { emoji: '🎂', left: '85%', delay: '4s' },
+    { emoji: '🎈', left: '92%', delay: '1s' },
+    { emoji: '🎁', left: '8%', delay: '6s' },
+    { emoji: '🎈', left: '88%', delay: '3s' },
+  ];
+
   return (
     <PageLayout>
-      <div className="w-full max-w-md text-center space-y-8">
+      {/* Floating balloons */}
+      {balloons.map((balloon, i) => (
+        <span
+          key={i}
+          className="balloon"
+          style={{ left: balloon.left, animationDelay: balloon.delay }}
+        >
+          {balloon.emoji}
+        </span>
+      ))}
+
+      <div className="w-full max-w-md text-center space-y-8 relative z-10">
         {/* Title Section */}
         <div className="space-y-1">
           <p className="text-2xl md:text-3xl text-white/80 slide-up-title" style={{ animationDelay: '200ms' }}>
@@ -47,7 +68,7 @@ export const Home = () => {
 
         {/* Footer */}
         <p className="text-sm text-muted-foreground fade-in-up" style={{ animationDelay: '200ms' }}>
-          Find the imposter among your friends
+          🎂 Celebrating Darsh's 2nd Birthday! 🎈
         </p>
       </div>
     </PageLayout>

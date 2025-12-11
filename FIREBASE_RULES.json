@@ -33,6 +33,16 @@
           ".write": "data.parent().child('hostUid').val() === auth.uid"
         },
 
+        "currentWord": {
+          ".write": "data.parent().child('hostUid').val() === auth.uid",
+          ".validate": "newData.isString() || newData.val() === null"
+        },
+
+        "currentWordHindi": {
+          ".write": "data.parent().child('hostUid').val() === auth.uid",
+          ".validate": "newData.isString() || newData.val() === null"
+        },
+
         "createdAt": {
           ".write": "!data.exists()"
         },
@@ -61,14 +71,6 @@
 
             "isRustam": {
               ".validate": "newData.isBoolean()"
-            },
-
-            "theme": {
-              ".validate": "newData.isString() || newData.val() === null"
-            },
-
-            "option": {
-              ".validate": "newData.isString() || newData.val() === null"
             }
           }
         }

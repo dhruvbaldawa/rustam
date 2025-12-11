@@ -3,14 +3,14 @@ import { THEMES, RANDOM_THEME, getThemeForRound, getRandomTheme } from '../../li
 
 describe('Theme Selection', () => {
   describe('THEMES constant', () => {
-    it('should have at least 5 themes', () => {
-      expect(THEMES.length).toBeGreaterThanOrEqual(5);
+    it('should have at least 3 themes', () => {
+      expect(THEMES.length).toBeGreaterThanOrEqual(3);
     });
 
     it('should contain expected theme categories', () => {
       expect(THEMES).toContain('Kitchen Appliances');
       expect(THEMES).toContain('Vehicles');
-      expect(THEMES).toContain('Fruits');
+      expect(THEMES).toContain('Indian Street Food');
     });
 
     it('should have all unique themes', () => {

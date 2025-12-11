@@ -29,17 +29,22 @@ export interface PhysicalQuestion {
 
 export type Question = HotSeatQuestion | PhysicalQuestion;
 
-// Category (theme) structure
-export interface Category {
+// Word with its specific questions
+export interface Word {
+  word: string;
+  wordHindi: string;
+  questions: Question[];
+}
+
+// Theme structure (contains words, each with their own questions)
+export interface Theme {
   id: number;
   name: string;
   nameHindi: string;
   difficulty: 'easy' | 'medium' | 'hard';
   style: 'yours' | 'youAreIt';
   styleHindi: string;
-  options: string[];
-  optionsHindi: string[];
-  questions: Question[];
+  words: Word[];
 }
 
 // Game info
@@ -55,32 +60,35 @@ export interface GameInfo {
 export interface GameData {
   gameInfo: GameInfo;
   physicalFormats: Record<PhysicalFormat, PhysicalFormatInfo>;
-  categories: Category[];
+  themes: Theme[];
 }
 
 // Type assertion for imported JSON
 export const gameData: GameData = gameDataJson as GameData;
 
-// Helper: Get all category names (themes)
+// Helper: Get all theme names
 export const getThemeNames = (): string[] => {
-  return gameData.categories.map((cat) => cat.name);
+  return gameData.themes.map((theme) => theme.name);
 };
 
-// Helper: Get category by name
-export const getCategoryByName = (name: string): Category | undefined => {
-  return gameData.categories.find((cat) => cat.name === name);
+// Helper: Get theme by name
+export const getThemeByName = (name: string): Theme | undefined => {
+  return gameData.themes.find((theme) => theme.name === name);
 };
 
-// Helper: Get questions for a category
-export const getQuestionsForCategory = (categoryName: string): Question[] => {
-  const category = getCategoryByName(categoryName);
-  return category?.questions ?? [];
+// Helper: Get a random word from a theme
+export const getRandomWordFromTheme = (themeName: string): Word | undefined => {
+  const theme = getThemeByName(themeName);
+  if (!theme || theme.words.length === 0) return undefined;
+  const randomIndex = Math.floor(Math.random() * theme.words.length);
+  return theme.words[randomIndex];
 };
 
-// Helper: Get options for a category
-export const getOptionsForCategory = (categoryName: string): string[] => {
-  const category = getCategoryByName(categoryName);
-  return category?.options ?? [];
+// Helper: Get questions for a specific word in a theme
+export const getQuestionsForWord = (themeName: string, wordText: string): Question[] => {
+  const theme = getThemeByName(themeName);
+  const word = theme?.words.find((w) => w.word === wordText);
+  return word?.questions ?? [];
 };
 
 // Helper: Get physical format info
@@ -96,11 +104,4 @@ export const shuffleArray = <T>(array: T[]): T[] => {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
-};
-
-// Helper: Get N unique random options from a category
-export const getRandomOptions = (categoryName: string, count: number): string[] => {
-  const options = getOptionsForCategory(categoryName);
-  const shuffled = shuffleArray(options);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
 };

@@ -168,25 +168,25 @@ export const Lobby = () => {
               </button>
 
               {/* Theme Cards */}
-              {gameData.categories.map((category) => (
+              {gameData.themes.map((theme) => (
                 <button
-                  key={category.id}
-                  onClick={() => setSelectedTheme(category.name)}
-                  className={`p-3 rounded-lg border-2 text-left transition-all ${selectedTheme === category.name
+                  key={theme.id}
+                  onClick={() => setSelectedTheme(theme.name)}
+                  className={`p-3 rounded-lg border-2 text-left transition-all ${selectedTheme === theme.name
                       ? 'border-primary bg-primary/20 ring-2 ring-primary/50'
                       : 'border-border bg-card/50 hover:border-primary/50'
                     }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-foreground text-sm truncate pr-1">
-                      {category.name}
+                      {theme.name}
                     </span>
-                    {selectedTheme === category.name && (
+                    {selectedTheme === theme.name && (
                       <Check className="w-4 h-4 text-primary flex-shrink-0" />
                     )}
                   </div>
-                  <span className={`inline-block text-xs px-2 py-0.5 rounded-full mt-1 border ${getDifficultyColor(category.difficulty)}`}>
-                    {category.difficulty}
+                  <span className={`inline-block text-xs px-2 py-0.5 rounded-full mt-1 border ${getDifficultyColor(theme.difficulty)}`}>
+                    {theme.difficulty}
                   </span>
                 </button>
               ))}

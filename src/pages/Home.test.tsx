@@ -30,7 +30,7 @@ describe('Home Page', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/The Rustam/i)).toBeInTheDocument();
+    expect(screen.getByText(/Rustam/i)).toBeInTheDocument();
   });
 
   it('should have Host Game button', () => {

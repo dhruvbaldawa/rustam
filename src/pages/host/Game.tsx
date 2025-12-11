@@ -8,7 +8,7 @@ import { useRoom } from '@/hooks/useRoom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PageLayout } from '@/components/game/page-layout';
-import { getQuestionsForCategory, getPhysicalFormatInfo, Question, PhysicalQuestion } from '@/lib/gameData';
+import { getQuestionsForWord, getPhysicalFormatInfo, Question, PhysicalQuestion } from '@/lib/gameData';
 
 interface LocationState {
   roomCode: string;
@@ -25,8 +25,10 @@ export const Game = () => {
 
   const roomCode = (location.state as LocationState)?.roomCode || room?.code;
 
-  // Get questions for the current theme
-  const questions = room?.currentTheme ? getQuestionsForCategory(room.currentTheme) : [];
+  // Get questions for the current word (questions are now word-specific)
+  const questions = room?.currentTheme && room?.currentWord
+    ? getQuestionsForWord(room.currentTheme, room.currentWord)
+    : [];
 
   useEffect(() => {
     if (roomCode) {
@@ -36,10 +38,10 @@ export const Game = () => {
     }
   }, [roomCode, subscribeToRoom]);
 
-  // Reset question index when theme changes
+  // Reset question index when word changes
   useEffect(() => {
     setCurrentQuestionIndex(0);
-  }, [room?.currentTheme]);
+  }, [room?.currentWord]);
 
   // Navigate to game over when game ends
   useEffect(() => {
@@ -146,6 +148,9 @@ export const Game = () => {
           <p className="text-muted-foreground text-sm mb-1">Round {room.currentRound}</p>
           <p className="text-xl font-semibold text-foreground">
             Theme: <span className="text-accent">{room.currentTheme || 'Loading...'}</span>
+          </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Word: <span className="text-accent">{room.currentWord || 'Loading...'}</span>
           </p>
           <p className="text-muted-foreground text-xs mt-1">
             {players.length} players

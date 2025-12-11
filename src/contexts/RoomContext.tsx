@@ -20,6 +20,8 @@ export interface RoomData {
   createdAt: number;
   rustamUid?: string | null;
   currentTheme?: string | null;
+  currentWord?: string | null;
+  currentWordHindi?: string | null;
 }
 
 export interface RoomContextType {
@@ -312,40 +314,33 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
         // Randomly select Rustam
         const rustamUid = playerUids[Math.floor(Math.random() * playerUids.length)];
 
-        // Get options for the theme and shuffle them
-        const { getOptionsForCategory, shuffleArray } = await import('@/lib/gameData');
-        const categoryOptions = getOptionsForCategory(currentTheme);
-        const shuffledOptions = shuffleArray(categoryOptions);
+        // Get a random word from the theme (all non-Rustam players see the same word)
+        const { getRandomWordFromTheme } = await import('@/lib/gameData');
+        const selectedWord = getRandomWordFromTheme(currentTheme);
 
-        // Assign roles to all players - each non-Rustam player gets a unique option
+        if (!selectedWord) {
+          setError(`No words found for theme: ${currentTheme}`);
+          return false;
+        }
+
+        // Assign roles to all players - only isRustam is stored per player
+        // The word is stored at room level since all non-Rustam players see the same word
         const roomUpdates: Record<string, unknown> = {};
-        let optionIndex = 0;
 
         playerUids.forEach((uid) => {
           const isRustam = uid === rustamUid;
-          if (isRustam) {
-            roomUpdates[`roles/${uid}`] = {
-              isRustam: true,
-              theme: null,
-              option: null,
-            };
-          } else {
-            // Assign a unique option to this player
-            const playerOption = shuffledOptions[optionIndex % shuffledOptions.length];
-            optionIndex++;
-            roomUpdates[`roles/${uid}`] = {
-              isRustam: false,
-              theme: currentTheme,
-              option: playerOption,
-            };
-          }
+          roomUpdates[`roles/${uid}`] = {
+            isRustam: isRustam,
+          };
         });
 
-        // Update room status and Rustam ID
+        // Update room status, Rustam ID, and word (shared by all players)
         roomUpdates['status'] = 'active';
         roomUpdates['rustamUid'] = rustamUid;
         roomUpdates['currentRound'] = nextRoundNumber;
         roomUpdates['currentTheme'] = currentTheme;
+        roomUpdates['currentWord'] = selectedWord.word;
+        roomUpdates['currentWordHindi'] = selectedWord.wordHindi;
 
         // Execute all updates atomically
         await update(roomRef, roomUpdates);
@@ -404,10 +399,12 @@ export const RoomProvider = ({ children }: RoomProviderProps) => {
         return false;
       }
 
-      // Clear old roles and reset to lobby
+      // Clear old roles, word, and reset to lobby
       const updates: Record<string, unknown> = {};
       updates[`rooms/${roomCode}/status`] = 'lobby';
       updates[`rooms/${roomCode}/rustamUid`] = null;
+      updates[`rooms/${roomCode}/currentWord`] = null;
+      updates[`rooms/${roomCode}/currentWordHindi`] = null;
 
       // Delete old roles
       const rolesRef = ref(db, `rooms/${roomCode}/roles`);

@@ -7,10 +7,10 @@ import { RoleReveal } from './RoleReveal';
 vi.mock('firebase/database', () => ({
     ref: vi.fn(),
     onValue: vi.fn((ref, callback) => {
-        // Simulate role data
+        // Simulate role data (only isRustam stored per player now)
         callback({
             exists: () => true,
-            val: () => ({ isRustam: false, theme: 'Kitchen Appliances', option: 'Toaster' }),
+            val: () => ({ isRustam: false }),
         });
         return vi.fn(); // unsubscribe
     }),
@@ -23,6 +23,8 @@ const mockRoom = {
     status: 'active' as const,
     currentRound: 1,
     currentTheme: 'Kitchen Appliances',
+    currentWord: 'Toaster',
+    currentWordHindi: 'टोस्टर',
     createdAt: Date.now(),
 };
 
@@ -97,7 +99,7 @@ describe('RoleReveal Page - Rustam Role', () => {
             onValue: vi.fn((ref, callback) => {
                 callback({
                     exists: () => true,
-                    val: () => ({ isRustam: true, theme: null, option: null }),
+                    val: () => ({ isRustam: true }),
                 });
                 return vi.fn();
             }),
