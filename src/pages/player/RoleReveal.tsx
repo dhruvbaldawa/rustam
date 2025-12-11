@@ -84,7 +84,7 @@ export const RoleReveal = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 safe-area-top safe-area-bottom"
+      <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 safe-area-top safe-area-bottom page-fade-in"
         style={{ backgroundColor: 'oklch(45% 0.2 25)' }}
       >
         <div className="text-center space-y-6">
@@ -105,7 +105,7 @@ export const RoleReveal = () => {
 
   if (loading || !role) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-gradient-game safe-area-top safe-area-bottom">
+      <div className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic bg-gradient-game safe-area-top safe-area-bottom page-fade-in">
         <div className="text-center space-y-4">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-white text-xl">Getting your role...</p>
@@ -122,7 +122,7 @@ export const RoleReveal = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 transition-all duration-500 safe-area-top safe-area-bottom"
+      className="flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 transition-all duration-500 safe-area-top safe-area-bottom page-fade-in"
       style={{ backgroundColor }}
     >
       <div className="w-full max-w-md text-center role-reveal">
