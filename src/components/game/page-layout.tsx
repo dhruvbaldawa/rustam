@@ -19,7 +19,7 @@ export function PageLayout({ children, className, variant = "default" }: PageLay
     return (
         <div
             className={cn(
-                "flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 safe-area-top safe-area-bottom page-fade-in",
+                "flex flex-col items-center justify-center min-h-screen min-h-screen-dynamic p-4 safe-area-top safe-area-bottom",
                 variantClasses[variant],
                 className
             )}

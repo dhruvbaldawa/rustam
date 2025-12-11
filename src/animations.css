@@ -105,7 +105,7 @@
 }
 
 .role-reveal {
-  animation: reveal-scale 500ms ease-out;
+  animation: reveal-scale 500ms ease-out both;
 }
 
 @keyframes role-pulse {
@@ -138,12 +138,12 @@
 }
 
 .fade-in-up {
-  animation: fade-in-up 300ms ease-out;
+  animation: fade-in-up 300ms ease-out both;
 }
 
 /* Staggered list animation */
 .fade-in-up-stagger-1 {
-  animation: fade-in-up 300ms ease-out;
+  animation: fade-in-up 300ms ease-out both;
 }
 
 .fade-in-up-stagger-2 {
@@ -172,7 +172,7 @@
 }
 
 .slide-in-right {
-  animation: slide-in-right 300ms ease-out;
+  animation: slide-in-right 300ms ease-out both;
 }
 
 /* Smooth transitions for state changes */
